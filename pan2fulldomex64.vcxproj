@@ -10,7 +10,7 @@
     <VCProjectVersion>16.0</VCProjectVersion>
     <ProjectGuid>{EB7B84BA-F34C-4EBA-B4B5-DE6F014CAF30}</ProjectGuid>
     <Keyword>x64Proj</Keyword>
-    <RootNamespace>OCVvid2fulldome</RootNamespace>
+    <RootNamespace>pan2fulldome</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -53,7 +53,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="OCVvid2fulldome.cpp" />
+    <ClCompile Include="pan2fulldome.cpp" />
     <ClCompile Include="tinyfiledialogs.c" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
