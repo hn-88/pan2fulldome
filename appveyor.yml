@@ -1,0 +1,29 @@
+# x64 build since the github opencv dll is only x64
+version: 1.60.{build}
+# base images
+image: Visual Studio 2015
+
+platform: x64
+configuration: Release       
+
+install:
+ 
+ - md OpenCV
+ - cd OpenCV
+ - ps: Start-FileDownload https://github.com/opencv/opencv/releases/download/4.3.0/opencv-4.3.0-vc14_vc15.exe
+ - 7z x opencv-4.3.0-vc14_vc15.exe
+ - cmd: setx -m OpenCV_DIR C:\projects\ocvvid2fulldome\OpenCV\opencv\build\x64\vc14
+#- cmd: setx path "%path%;C:\projects\ocvwarp\opencv-3.4.9\build\install\x86\vc14\bin;C:\projects\ocvwarp\opencv-3.4.9\build\install\x86\vc14\lib"
+ - refreshenv
+ - cd .. 
+  
+  
+build:
+  project: OCVvid2fulldomex64.vcxproj
+
+  verbosity: minimal
+ 
+artifacts:
+- path: x64\Release\OCVvid2fulldomex64.exe
+  
+    
