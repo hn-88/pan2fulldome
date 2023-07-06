@@ -1,12 +1,12 @@
 /*
- * OCVvid2fulldome.cpp
+ * pan2fulldome.cpp
  * 
- * Warps "flat" video files to fit 180 degree fisheye "fulldome masters" using the OpenCV framework. 
- * Appends 'F.avi' to the first filename and saves as default codec (XVID avi) in the same folder.
+ * Warps "flat" panoramic images to fit 180 degree fisheye "fulldome masters" using the OpenCV framework. 
+ * Appends 'F.jpg' to the filename and saves in the same folder by default.
  * 
- * first commit:
+ * first code edits:
  * Hari Nandakumar
- * 10 May 2020
+ * 6 Jul 2023
  * 
  * 
  */
@@ -15,9 +15,7 @@
 //#define __unix__
 
 // references 
-// http://paulbourke.net/geometry/transformationprojection/
-// equations in figure at http://paulbourke.net/dome/dualfish2sphere/
-// http://paulbourke.net/dome/dualfish2sphere/diagram.pdf
+// https://hnsws.blogspot.com/2012/11/displaying-panoramas-on-fulldome.html
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -164,25 +162,15 @@ int main(int argc,char *argv[])
 	bool showdisplay = 1, interactivemode=0;
 	bool skipinputs = 0;
 	int outputw;
-	double outputfps;
-	char outputfourcc[5] = {'X','V','I','D', '\0'};
-	std::string fourccstr;
-	int numvids;
-	std::string VidFileName[100];
+	std::string PanFileName;
 	std::string NAME;
-	int vidlongi[100];
-	int vidlati[100];
-	int vidw[100];
+	int panw;
 	float aspectratio[100];
 	int looptemp=0;
-	cv::VideoCapture inputVideo[100];
-	bool inputEnded[100];
 	std::string escapedpath;
-	cv::VideoWriter outputVideo;
 	int  fps, key;
 	int t_start, t_end;
     unsigned long long framenum = 0;
-    std::string tempstring, inistr;
     char const * lTmp;
     char * ptr;
      
@@ -199,25 +187,25 @@ int main(int argc,char *argv[])
     
     if(argc <= 1)
     {
-		char const * FilterPatternsini[2] =  { "*.ini","*.*" };
-		char const * OpenFileNameini;
+		char const * FilterPatternsimg[2] =  { "*.jpg","*.png" };
+		char const * OpenFileNameimg;
 		
-		OpenFileNameini = tinyfd_openFileDialog(
-				"Open an ini file if it exists",
+		OpenFileNameimg = tinyfd_openFileDialog(
+				"Open input pan image file",
 				"",
 				2,
-				FilterPatternsini,
+				FilterPatternsimg,
 				NULL,
 				0);
 
-		if (! OpenFileNameini)
+		if (! OpenFileNameimg)
 		{
 			skipinputs = 0;
 		}
 		else
 		{
 			skipinputs = 1;
-			inistr = OpenFileNameini;
+			inistr = PanFileName;
 		}
 	}
 	    
