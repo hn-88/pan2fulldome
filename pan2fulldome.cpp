@@ -16,6 +16,7 @@
 
 // references 
 // https://hnsws.blogspot.com/2012/11/displaying-panoramas-on-fulldome.html
+// https://github.com/hn-88/OCVvid2fulldome
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -205,7 +206,7 @@ int main(int argc,char *argv[])
 		else
 		{
 			skipinputs = 1;
-			inistr = PanFileName;
+			escapedpath = OpenFileNameimg;
 		}
 	}
 	    
@@ -213,12 +214,29 @@ int main(int argc,char *argv[])
     {
 		// argument can be ini file path
 		skipinputs = 1;
-		inistr = argv[1];
+		escapedpath = argv[1];
 	}
 	
 	if(skipinputs)
     {
-		std::ifstream infile(inistr);
+	try {
+		Mat img = imread(image_path, IMREAD_COLOR);
+		if(img.empty())
+		 {
+		 std::cout << "Could not read the image: " << image_path << std::endl;
+		 return 1;
+		 }
+		 imshow("Display window", img);
+		 int k = waitKey(0); // Wait for a keystroke in the window
+		 return 0;
+		
+	    }
+	catch {
+		 std::cout << "Error reading the image: " << image_path << std::endl;
+		return 1;
+	}
+	    /*
+	    
 		if (infile.is_open())
 		  {
 			  try
@@ -682,5 +700,5 @@ int main(int argc,char *argv[])
 	} // end of while(1)
 	
 	std::cout << std::endl << "Finished writing." << std::endl;
-	return 0;
+	return 0; */
 }
