@@ -31,6 +31,9 @@
 #include <fstream>
 #include <time.h>
 #include <opencv2/opencv.hpp>
+#include <opencv2/core.hpp>
+#include <opencv2/imgcodecs.hpp>
+#include <opencv2/highgui.hpp>
 #include "tinyfiledialogs.h"
 
 #define CV_PI   3.1415926535897932384626433832795
@@ -220,10 +223,10 @@ int main(int argc,char *argv[])
 	if(skipinputs)
     {
 	try {
-		Mat img = imread(image_path, IMREAD_COLOR);
+		cv::Mat img = imread(escapedpath, cv::IMREAD_COLOR);
 		if(img.empty())
 		 {
-		 std::cout << "Could not read the image: " << image_path << std::endl;
+		 std::cout << "Could not read the image: " << escapedpath << std::endl;
 		 return 1;
 		 }
 		 imshow("Display window", img);
