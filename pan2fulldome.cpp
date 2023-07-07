@@ -38,7 +38,7 @@
 
 #define CV_PI   3.1415926535897932384626433832795
 
-std::string escaped(const std::string& input)
+std::string (const std::string& input)
 {
 	// https://stackoverflow.com/questions/48260879/how-to-replace-with-in-c-string
 	// needed for windows paths for opencv
@@ -209,7 +209,7 @@ int main(int argc,char *argv[])
 		else
 		{
 			skipinputs = 1;
-			escapedpath = OpenFileNameimg;
+			escapedpath = escaped(std::string(OpenFileNameimg);
 		}
 	} // end if arc <= 1
 	    
