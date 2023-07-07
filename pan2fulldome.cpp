@@ -211,32 +211,33 @@ int main(int argc,char *argv[])
 			skipinputs = 1;
 			escapedpath = OpenFileNameimg;
 		}
-	}
+	} // end if arc <= 1
 	    
     if(argc > 1)
     {
 		// argument can be ini file path
 		skipinputs = 1;
 		escapedpath = argv[1];
-	}
+    }
 	
-	if(skipinputs)
+    if(skipinputs)
     {
 	try {
-		cv::Mat img = imread(escapedpath, cv::IMREAD_COLOR);
+		cv::Mat img = cv::imread(escapedpath, cv::IMREAD_COLOR);
 		if(img.empty())
 			 {
 			 std::cout << "Could not read the image: " << escapedpath << std::endl;
 			 return 1;
 			 }
-		imshow("Display window", img);
+		cv::imshow("Display window", img);
 		int k = cv::waitKey(0); // Wait for a keystroke in the window
 		return 0;		
-	    }
+	} // end try
 	catch {
 		 std::cout << "Error reading the image: " << image_path << std::endl;
 		return 1;
-	}
+	} // end catch
+    } // end if skipinputs
 	    /*
 	    
 		if (infile.is_open())
