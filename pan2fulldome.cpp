@@ -209,7 +209,7 @@ int main(int argc,char *argv[])
 		else
 		{
 			skipinputs = 1;
-			escapedpath = escaped(std::string(OpenFileNameimg);
+			escapedpath = escaped(std::string(OpenFileNameimg));
 		}
 	} // end if arc <= 1
 	    
