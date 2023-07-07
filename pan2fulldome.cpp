@@ -234,7 +234,7 @@ int main(int argc,char *argv[])
 		return 0;		
 	} // end try
 	catch {
-		 std::cout << "Error reading the image: " << image_path << std::endl;
+		 std::cout << "Error reading the image: " << escapedpath << std::endl;
 		return 1;
 	} // end catch
     } // end if skipinputs
