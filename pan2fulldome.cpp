@@ -225,14 +225,13 @@ int main(int argc,char *argv[])
 	try {
 		cv::Mat img = imread(escapedpath, cv::IMREAD_COLOR);
 		if(img.empty())
-		 {
-		 std::cout << "Could not read the image: " << escapedpath << std::endl;
-		 return 1;
-		 }
-		 imshow("Display window", img);
-		 int k = waitKey(0); // Wait for a keystroke in the window
-		 return 0;
-		
+			 {
+			 std::cout << "Could not read the image: " << escapedpath << std::endl;
+			 return 1;
+			 }
+		imshow("Display window", img);
+		int k = cv::waitKey(0); // Wait for a keystroke in the window
+		return 0;		
 	    }
 	catch {
 		 std::cout << "Error reading the image: " << image_path << std::endl;
