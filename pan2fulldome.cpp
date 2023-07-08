@@ -223,7 +223,7 @@ int main(int argc,char *argv[])
     if(skipinputs==1)
     {	
 	cv::Mat img = cv::imread(escapedpath, cv::IMREAD_COLOR);
-	/*
+	
 	if(img.empty())
 		 {
 		 std::cout << "Could not read the image: " << escapedpath << std::endl;
@@ -231,7 +231,7 @@ int main(int argc,char *argv[])
 		 }
 	cv::imshow("Display window", img);
 	int k = cv::waitKey(0); // Wait for a keystroke in the window
-	return 0;*/		
+	return 0;		
 		
 	} // end if skipinputs
 	    /*
