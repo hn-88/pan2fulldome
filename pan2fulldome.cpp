@@ -151,9 +151,8 @@ cv::Mat dst2, dst3, dsts;	// temp dst, for eachvid
 		frame = cv::Scalar(49, 52, 49);
 
 		// Render UI components to the frame
-		cvui::text(frame, 110, 80, "Hello, world!");
-		cvui::text(frame, 110, 120, "cvui is awesome!");
-		cvui::button(frame, 10, 10, dst, dst, dst);
+		cvui::text(frame, 250, 10, "Preview");
+		//cvui::button(frame, 10, 30, dst, dst, dst);
 		
 		// Update cvui stuff and show everything on the screen
 		cvui::imshow(WINDOW_NAME, frame);
