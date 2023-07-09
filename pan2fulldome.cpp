@@ -157,9 +157,9 @@ cv::Mat dst2, dst3, dsts;	// temp dst, for eachvid
 		// Update cvui stuff and show everything on the screen
 		cvui::imshow(WINDOW_NAME, frame);
 
-		if (cv::waitKey(20) == 27) {
-			break;
-		}
+		// if (cv::waitKey(20) == 27) {
+		// 	break;
+		// }
 		if (cvui::button(frame, 500, 500, "Close")) {
 		    // close button was clicked
 			break;
