@@ -133,7 +133,7 @@ cv::Mat dst2, dst3, dsts;	// temp dst, for eachvid
 	cv::resize(img, dst, cv::Size(400,400), 0, 0, cv::INTER_CUBIC);
 	cv::Point2f centrepoint( (float)dst.cols / 2, (float)dst.rows / 2 );
 	double maxRadius = (double)dst.cols / 2;
-	int flags = INTER_LINEAR + WARP_FILL_OUTLIERS;
+	int flags = cv::INTER_LINEAR + cv::WARP_FILL_OUTLIERS;
 	cv::linearPolar(dst, dst, centrepoint, maxRadius, flags);
 	
 	if(img.empty())
