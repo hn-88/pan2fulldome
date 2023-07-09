@@ -135,7 +135,7 @@ cv::Mat dst2, dst3, dsts;	// temp dst, for eachvid
 	cv::Point2f centrepoint( (float)dst.cols / 2, (float)dst.rows / 2 );
 	double maxRadius = (double)dst.cols / 2;
 	int flags = cv::INTER_LINEAR + cv::WARP_FILL_OUTLIERS + cv::WARP_INVERSE_MAP;
-	cv::warpPolar(dst, dst, centrepoint, dstsize, maxRadius, flags);
+	cv::warpPolar(dst, dst, dstsize, centrepoint, maxRadius, flags);
 	
 	if(img.empty())
 		 {
