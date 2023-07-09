@@ -5,6 +5,7 @@ on: workflow_dispatch
 env:
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
   BUILD_TYPE: Release
+  PATH_TO_ARTIFACT: $GITHUB_WORKSPACE/build/pan2fulldome
 
 jobs:
   build:
@@ -43,7 +44,7 @@ jobs:
         # Artifact name
         name: # optional, default is artifact
         # A file, directory or wildcard pattern that describes what to upload
-        path: pan2fulldome
+        path: ${{env.PATH_TO_ARTIFACT}}
         # The desired behavior if no files are found using the provided path.
         #Available Options:
         #  warn: Output a warning but do not fail the action
