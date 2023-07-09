@@ -152,17 +152,21 @@ cv::Mat dst2, dst3, dsts;	// temp dst, for eachvid
 		// Render UI components to the frame
 		cvui::text(frame, 110, 80, "Hello, world!");
 		cvui::text(frame, 110, 120, "cvui is awesome!");
-		cvui::button closeButton = cvui::button(frame, 500, 500, "Close");
-	
-
+		cvui::button(frame, 10, 10, img, img, img)
+		
 		// Update cvui stuff and show everything on the screen
 		cvui::imshow(WINDOW_NAME, frame);
 
 		if (cv::waitKey(20) == 27) {
 			break;
 		}
-		if (closeButton) {
+		if (cvui::button(frame, 500, 500, "Close")) {
 		    // close button was clicked
+			break;
+		}
+		if (cvui::button(frame, 400, 500, "Save")) {
+		    // save button was clicked
+			// save code
 			break;
 		}
 	}
