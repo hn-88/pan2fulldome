@@ -124,6 +124,11 @@ cv::Mat dst2, dst3, dsts;	// temp dst, for eachvid
 	
     if(skipinputs==1)
     {	
+	lTmp = tinyfd_inputBox(
+		"Please Input", "Output video width (=height)", "1024");
+	if (!lTmp) return 1 ;
+	
+	outputw = atoi(lTmp);
 	cv::Mat img = cv::imread(escapedpath, cv::IMREAD_COLOR);
 	
 	if(img.empty())
