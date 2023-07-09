@@ -136,11 +136,11 @@ cv::Mat dst2, dst3, dsts;	// temp dst, for eachvid
 		 std::cout << "Could not read the image: " << escapedpath << std::endl;
 		 return 1;
 		 }
-	cv::imshow("Display window", img);
+	cv::imshow("Input image", img);
 	
 	////////// CVUI ///////////////
 	    // Create a frame where components will be rendered to.
-	cv::Mat frame = cv::Mat(200, 500, CV_8UC3);
+	cv::Mat frame = cv::Mat(600, 600, CV_8UC3);
 
 	// Init cvui and tell it to create a OpenCV window, i.e. cv::namedWindow(WINDOW_NAME).
 	cvui::init(WINDOW_NAME);
@@ -152,11 +152,17 @@ cv::Mat dst2, dst3, dsts;	// temp dst, for eachvid
 		// Render UI components to the frame
 		cvui::text(frame, 110, 80, "Hello, world!");
 		cvui::text(frame, 110, 120, "cvui is awesome!");
+		cvui::button closeButton = cvui::button(frame, 500, 500, "Close");
+	
 
 		// Update cvui stuff and show everything on the screen
 		cvui::imshow(WINDOW_NAME, frame);
 
 		if (cv::waitKey(20) == 27) {
+			break;
+		}
+		if (closeButton) {
+		    // close button was clicked
 			break;
 		}
 	}
