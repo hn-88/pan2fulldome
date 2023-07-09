@@ -131,7 +131,8 @@ cv::Mat dst2, dst3, dsts;	// temp dst, for eachvid
 	outputw = atoi(lTmp);
 	cv::Mat img = cv::imread(escapedpath, cv::IMREAD_COLOR);
 	cv::resize(img, dst, cv::Size(400,400), 0, 0, cv::INTER_CUBIC);
-	cv::Point2f centrepoint( (float)dst.cols / 2, (float)dst.rows / 2 );
+	//cv::Point2f centrepoint( (float)dst.cols / 2, (float)dst.rows / 2 );
+	cv::Point2f centrepoint(0, 0 );   
 	double maxRadius = (double)dst.cols / 2;
 	int flags = cv::INTER_LINEAR + cv::WARP_FILL_OUTLIERS;
 	cv::linearPolar(dst, dst, centrepoint, maxRadius, flags);
@@ -156,13 +157,13 @@ cv::Mat dst2, dst3, dsts;	// temp dst, for eachvid
 
 		// Render UI components to the frame
 		cvui::text(frame, 250, 10, "Preview");
-		cvui::button(frame, 10, 30, dst, dst, dst);
+		cvui::button(frame, 40, 30, dst, dst, dst);
 
-		if (cvui::button(frame, 450, 450, "Close")) {
+		if (cvui::button(frame, 250, 450, "Close")) {
 		    // close button was clicked
 			break;
 		}
-		if (cvui::button(frame, 400, 450, "Save")) {
+		if (cvui::button(frame, 200, 450, "Save")) {
 		    // save button was clicked
 			// save code
 			break;
