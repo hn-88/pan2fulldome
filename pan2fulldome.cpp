@@ -152,7 +152,7 @@ cv::Mat dst2, dst3, dsts;	// temp dst, for eachvid
 		// Render UI components to the frame
 		cvui::text(frame, 110, 80, "Hello, world!");
 		cvui::text(frame, 110, 120, "cvui is awesome!");
-		cvui::button(frame, 10, 10, img, img, img)
+		cvui::button(frame, 10, 10, img, img, img);
 		
 		// Update cvui stuff and show everything on the screen
 		cvui::imshow(WINDOW_NAME, frame);
