@@ -130,18 +130,22 @@ cv::Mat dst2, dst3, dsts;	// temp dst, for eachvid
 	
 	outputw = atoi(lTmp);
 	cv::Mat img = cv::imread(escapedpath, cv::IMREAD_COLOR);
-	cv::resize(img, dst, cv::Size(400,400), 0, 0, cv::INTER_CUBIC); 
+	cv::resize(img, dst, cv::Size(400,400), 0, 0, cv::INTER_CUBIC);
+	cv::Point2f centrepoint( (float)dst.cols / 2, (float)dst.rows / 2 );
+	double maxRadius = (double)dst.cols / 2;
+	int flags = INTER_LINEAR + WARP_FILL_OUTLIERS;
+	cv::linearPolar(dst, dst, centrepoint, maxRadius, flags);
 	
 	if(img.empty())
 		 {
 		 std::cout << "Could not read the image: " << escapedpath << std::endl;
 		 return 1;
 		 }
-	cv::imshow("Input image", img);
+	//cv::imshow("Input image", img);
 	
 	////////// CVUI ///////////////
 	    // Create a frame where components will be rendered to.
-	cv::Mat frame = cv::Mat(600, 600, CV_8UC3);
+	cv::Mat frame = cv::Mat(480, 480, CV_8UC3);
 
 	// Init cvui and tell it to create a OpenCV window, i.e. cv::namedWindow(WINDOW_NAME).
 	cvui::init(WINDOW_NAME);
@@ -154,11 +158,11 @@ cv::Mat dst2, dst3, dsts;	// temp dst, for eachvid
 		cvui::text(frame, 250, 10, "Preview");
 		cvui::button(frame, 10, 30, dst, dst, dst);
 
-		if (cvui::button(frame, 500, 500, "Close")) {
+		if (cvui::button(frame, 450, 450, "Close")) {
 		    // close button was clicked
 			break;
 		}
-		if (cvui::button(frame, 400, 500, "Save")) {
+		if (cvui::button(frame, 400, 450, "Save")) {
 		    // save button was clicked
 			// save code
 			break;
