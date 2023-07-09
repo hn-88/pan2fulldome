@@ -130,7 +130,7 @@ cv::Mat dst2, dst3, dsts;	// temp dst, for eachvid
 	
 	outputw = atoi(lTmp);
 	cv::Mat img = cv::imread(escapedpath, cv::IMREAD_COLOR);
-	cv::resize(img, dst, Size(400,400), 0, 0, cv::INTER_CUBIC); 
+	cv::resize(img, dst, cv::Size(400,400), 0, 0, cv::INTER_CUBIC); 
 	
 	if(img.empty())
 		 {
