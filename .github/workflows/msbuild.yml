@@ -34,7 +34,7 @@ jobs:
       run: nuget restore ${{env.SOLUTION_FILE_PATH}}
       
     - name: Install OpenCV with Nuget
-      run: NuGet\Install-Package PS.OpenCV.CPP.Configuration -Version 4.5.7 -Force
+      run: nuget install PS.OpenCV.CPP.Configuration
 
     - name: Build
       working-directory: ${{env.GITHUB_WORKSPACE}}
