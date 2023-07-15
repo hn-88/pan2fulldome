@@ -15,8 +15,6 @@ env:
   # You can convert this to a build matrix if you need coverage of multiple configuration types.
   # https://docs.github.com/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
   BUILD_CONFIGURATION: Release
-  
-  shell: bash
 
 permissions:
   contents: read
@@ -33,11 +31,11 @@ jobs:
       
     - name: Install OpenCV from github releases
       run: |
-        mkdir OpenCV
+        md OpenCV
         cd OpenCV
-        curl "https://github.com/opencv/opencv/releases/download/4.3.0/opencv-4.3.0-vc14_vc15.exe" --output opencv-4.3.0-vc14_vc15.exe 
+        powershell -c "Invoke-WebRequest -Uri 'https://github.com/opencv/opencv/releases/download/4.3.0/opencv-4.3.0-vc14_vc15.exe' -OutFile 'opencv-4.3.0-vc14_vc15.exe'" 
         7z x opencv-4.3.0-vc14_vc15.exe
-        export OpenCV_DIR=D:\a\pan2fulldome\pan2fulldome\OpenCV\opencv\build\x64\vc14
+        setx OpenCV_DIR "D:\a\pan2fulldome\pan2fulldome\OpenCV\opencv\build\x64\vc14"
         cd ..
 
     - name: Build
