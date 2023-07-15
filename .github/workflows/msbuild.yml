@@ -37,7 +37,8 @@ jobs:
       run: |
         md OpenCV
         cd OpenCV
-        Start-FileDownload https://github.com/opencv/opencv/releases/download/4.3.0/opencv-4.3.0-vc14_vc15.exe
+        $wc = New-Object System.Net.WebClient
+        $wc.DownloadFile("https://github.com/opencv/opencv/releases/download/4.3.0/opencv-4.3.0-vc14_vc15.exe", "opencv-4.3.0-vc14_vc15.exe") 
         7z x opencv-4.3.0-vc14_vc15.exe
         setx -m OpenCV_DIR D:\a\pan2fulldome\pan2fulldome\OpenCV\opencv\build\x64\vc14
         refreshenv
