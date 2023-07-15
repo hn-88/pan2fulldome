@@ -35,7 +35,7 @@ jobs:
       run: |
         mkdir OpenCV
         cd OpenCV
-        wget "https://github.com/opencv/opencv/releases/download/4.3.0/opencv-4.3.0-vc14_vc15.exe"
+        curl "https://github.com/opencv/opencv/releases/download/4.3.0/opencv-4.3.0-vc14_vc15.exe" --output opencv-4.3.0-vc14_vc15.exe 
         7z x opencv-4.3.0-vc14_vc15.exe
         export OpenCV_DIR=D:\a\pan2fulldome\pan2fulldome\OpenCV\opencv\build\x64\vc14
         cd ..
