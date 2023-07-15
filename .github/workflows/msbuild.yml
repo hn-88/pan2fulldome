@@ -33,7 +33,9 @@ jobs:
       run: |
         md OpenCV
         cd OpenCV
+        echo "Downloading OpenCV release..."
         powershell -c "Invoke-WebRequest -Uri 'https://github.com/opencv/opencv/releases/download/4.3.0/opencv-4.3.0-vc14_vc15.exe' -OutFile 'opencv-4.3.0-vc14_vc15.exe'" 
+        echo "Download complete. Extracting ... "
         7z x opencv-4.3.0-vc14_vc15.exe
         setx OpenCV_DIR "D:\a\pan2fulldome\pan2fulldome\OpenCV\opencv\build\x64\vc14"
         refreshenv
