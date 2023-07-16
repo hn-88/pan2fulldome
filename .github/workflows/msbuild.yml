@@ -53,7 +53,7 @@ jobs:
         name: pan2fulldomeWin10
         # optional, default is artifact
         # A file, directory or wildcard pattern that describes what to upload
-        path: x64\Release\pan2fulldomex64.exe
+        path: x64\Release\x64Win10.exe
         # The desired behavior if no files are found using the provided path.
         #Available Options:
         #  warn: Output a warning but do not fail the action
