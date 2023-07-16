@@ -15,6 +15,7 @@ env:
   # You can convert this to a build matrix if you need coverage of multiple configuration types.
   # https://docs.github.com/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
   BUILD_CONFIGURATION: Release
+  OpenCV_DIR: D:\a\pan2fulldome\pan2fulldome\OpenCV\opencv\build\x64\vc14
 
 permissions:
   contents: read
@@ -37,8 +38,6 @@ jobs:
         powershell -c "Invoke-WebRequest -Uri 'https://github.com/opencv/opencv/releases/download/4.3.0/opencv-4.3.0-vc14_vc15.exe' -OutFile 'opencv-4.3.0-vc14_vc15.exe'" 
         echo "Download complete. Extracting ... "
         7z x opencv-4.3.0-vc14_vc15.exe
-        setx OpenCV_DIR "D:\a\pan2fulldome\pan2fulldome\OpenCV\opencv\build\x64\vc14"
-        refreshenv
         cd ..
 
     - name: Build
