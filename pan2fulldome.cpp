@@ -125,7 +125,7 @@ cv::Mat dst2, dst3, dsts;	// temp dst, for eachvid
     if(skipinputs==1)
     {	
 	lTmp = tinyfd_inputBox(
-		"Please Input", "Output video width (=height)", "1024");
+		"Please Input", "Output image width (=height)", "1024");
 	if (!lTmp) return 1 ;
 	
 	outputw = atoi(lTmp);
