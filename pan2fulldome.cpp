@@ -83,7 +83,7 @@ int t_start, t_end;
 char const * lTmp;
 char * ptr;
 
-cv::Mat src, dst, res;
+cv::Mat src, dst, res, dstdisplay;
 cv::Mat dstfloat, dstmult, dstres, dstflip;
 cv::Size Sout;
 
@@ -130,14 +130,16 @@ cv::Mat dst2, dst3, dsts;	// temp dst, for eachvid
 	
 	outputw = atoi(lTmp);
 	cv::Mat img = cv::imread(escapedpath, cv::IMREAD_COLOR);
-	cv::resize(img, dst, cv::Size(400,400), 0, 0, cv::INTER_CUBIC);
+	cv::resize(img, dstdisplay, cv::Size(400,400), 0, 0, cv::INTER_CUBIC);
 	//cv::rotate(dst, img, cv::ROTATE_90_CLOCKWISE);   This results in a little planet view
-	cv::rotate(dst, img, cv::ROTATE_90_COUNTERCLOCKWISE);
-	cv::Size dstsize = cv::Size(400,400);
-	cv::Point2f centrepoint( (float)dst.cols / 2, (float)dst.rows / 2 );
-	double maxRadius = (double)dst.cols / 2;
+	cv::rotate(dstdisplay, img, cv::ROTATE_90_COUNTERCLOCKWISE);
+	cv::Size dstdisplaysize = cv::Size(400,400);
+	cv::Point2f centrepointdisp( (float)dstdisplay.cols / 2, (float)dstdisplay.rows / 2 );
+	double maxRadiusdisp = (double)dstdisplay.cols / 2;
 	int flags = cv::INTER_LINEAR + cv::WARP_FILL_OUTLIERS + cv::WARP_INVERSE_MAP;
-	cv::warpPolar(img, dst, dstsize, centrepoint, maxRadius, flags);
+	cv::warpPolar(img, dstdisplay, dstdisplaysize, centrepointdisp, maxRadiusdisp, flags);
+	    // one more rotate is needed
+	cv::rotate(dstdisplay, dstdisplay, cv::ROTATE_90_COUNTERCLOCKWISE);
 	
 	if(img.empty())
 		 {
