@@ -121,15 +121,15 @@ cv::Mat dst2, dst3, dsts;	// temp dst, for eachvid
     }
 	// https://www.oreilly.com/library/view/c-cookbook/0596007612/ch10s17.html
 	
-    escapedsavedpath = escapedpath;
-    string::size_type i = escapedsavedpath.rfind('.', escapedsavedpath.length());
+    escapedsavepath = escapedpath;
+    std::string::size_type i = escapedsavepath.rfind('.', escapedsavepath.length());
 
-   if (i != string::npos) {
-      escapedsavedpath.replace(i, 5, "F.jpg");
+   if (i != std::string::npos) {
+      escapedsavepath.replace(i, 5, "F.jpg");
    }
 	else
    {
-	   escapedsavedpath = escapedsavedpath + "F.jpg";
+	   escapedsavepath = escapedsavepath + "F.jpg";
    }
 	
     if(skipinputs==1)
