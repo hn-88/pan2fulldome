@@ -166,7 +166,8 @@ cv::Mat dst2, dst3, dsts;	// temp dst, for eachvid
 	
 	////////// CVUI ///////////////
 	    // Create a frame where components will be rendered to.
-	cv::Mat frame = cv::Mat(480, 480, CV_8UC3);
+	cv::Mat frame = cv::Mat(680, 680, CV_8UC3);
+	int sky_threshold = 0;
 
 	// Init cvui and tell it to create a OpenCV window, i.e. cv::namedWindow(WINDOW_NAME).
 	cvui::init(WINDOW_NAME);
@@ -176,19 +177,21 @@ cv::Mat dst2, dst3, dsts;	// temp dst, for eachvid
 		frame = cv::Scalar(49, 52, 49);
 
 		// Render UI components to the frame
-		cvui::text(frame, 250, 10, "Preview");
-		cvui::button(frame, 40, 30, dstdisplay, dstdisplay, dstdisplay);
+		cvui::text(frame, 350, 10, "Preview");
+		cvui::button(frame, 140, 30, dstdisplay, dstdisplay, dstdisplay);
 
-		if (cvui::button(frame, 250, 450, "Close")) {
+		cvui::trackbar(frame, 15, 600, 165, &sky_threshold, 0, 400);
+
+		if (cvui::button(frame, 250, 650, "Close")) {
 		    // close button was clicked
 			break;
 		}
-		if (cvui::button(frame, 200, 450, "Save")) {
+		if (cvui::button(frame, 200, 650, "Save")) {
 		    // save button was clicked
 		    cv::warpPolar(dst, dst, dstsize, centrepoint, maxRadius, flags);
 		    cv::rotate(dst, dst, cv::ROTATE_90_COUNTERCLOCKWISE);
 		    cv::imwrite(escapedsavepath, dst);
-			break;
+			//break; don't close the window yet.
 		}
 		
 		// Update cvui stuff and show everything on the screen
