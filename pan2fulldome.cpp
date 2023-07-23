@@ -177,7 +177,7 @@ cv::Mat dst2, dst3, dsts;	// temp dst, for eachvid
 
 		// Render UI components to the frame
 		cvui::text(frame, 250, 10, "Preview");
-		cvui::button(frame, 40, 30, dst, dst, dst);
+		cvui::button(frame, 40, 30, dstdisplay, dstdisplay, dstdisplay);
 
 		if (cvui::button(frame, 250, 450, "Close")) {
 		    // close button was clicked
