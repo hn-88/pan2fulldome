@@ -73,12 +73,10 @@ bool skipinputs = 0;
 int outputw;
 std::string PanFileName;
 std::string NAME;
-int panw;
 float aspectratio[100];
 int looptemp=0;
 std::string escapedpath;
-int  fps, key;
-int t_start, t_end;
+std::string escapedsavepath;
     
 char const * lTmp;
 char * ptr;
@@ -121,6 +119,18 @@ cv::Mat dst2, dst3, dsts;	// temp dst, for eachvid
 		skipinputs = 1;
 		escapedpath = argv[1];
     }
+	// https://www.oreilly.com/library/view/c-cookbook/0596007612/ch10s17.html
+	
+    escapedsavedpath = escapedpath;
+    string::size_type i = escapedsavedpath.rfind('.', escapedsavedpath.length());
+
+   if (i != string::npos) {
+      escapedsavedpath.replace(i, 5, "F.jpg");
+   }
+	else
+   {
+	   escapedsavedpath = escapedsavedpath + "F.jpg";
+   }
 	
     if(skipinputs==1)
     {	
@@ -130,15 +140,21 @@ cv::Mat dst2, dst3, dsts;	// temp dst, for eachvid
 	
 	outputw = atoi(lTmp);
 	cv::Mat img = cv::imread(escapedpath, cv::IMREAD_COLOR);
-	cv::resize(img, dstdisplay, cv::Size(400,400), 0, 0, cv::INTER_CUBIC);
 	//cv::rotate(dst, img, cv::ROTATE_90_CLOCKWISE);   This results in a little planet view
-	cv::rotate(dstdisplay, img, cv::ROTATE_90_COUNTERCLOCKWISE);
+	cv::rotate(img, img, cv::ROTATE_90_COUNTERCLOCKWISE);
+	cv::resize(img, dstdisplay, cv::Size(400,400), 0, 0, cv::INTER_CUBIC);
+	cv::resize(img, dst, cv::Size(outputw, outputw), 0, 0, cv::INTER_CUBIC);
+		
 	cv::Size dstdisplaysize = cv::Size(400,400);
+	cv::Size dstsize = cv::Size(outputw,outputw);
 	cv::Point2f centrepointdisp( (float)dstdisplay.cols / 2, (float)dstdisplay.rows / 2 );
+	cv::Point2f centrepoint( (float)dst.cols / 2, (float)dst.rows / 2 );
 	double maxRadiusdisp = (double)dstdisplay.cols / 2;
+	double maxRadius = (double)dst.cols / 2;
+	    
 	int flags = cv::INTER_LINEAR + cv::WARP_FILL_OUTLIERS + cv::WARP_INVERSE_MAP;
-	cv::warpPolar(img, dstdisplay, dstdisplaysize, centrepointdisp, maxRadiusdisp, flags);
-	    // one more rotate is needed
+	cv::warpPolar(dstdisplay, dstdisplay, dstdisplaysize, centrepointdisp, maxRadiusdisp, flags);
+		    // one more rotate is needed
 	cv::rotate(dstdisplay, dstdisplay, cv::ROTATE_90_COUNTERCLOCKWISE);
 	
 	if(img.empty())
@@ -169,7 +185,9 @@ cv::Mat dst2, dst3, dsts;	// temp dst, for eachvid
 		}
 		if (cvui::button(frame, 200, 450, "Save")) {
 		    // save button was clicked
-			// save code
+		    cv::warpPolar(dst, dst, dstsize, centrepoint, maxRadius, flags);
+		    cv::rotate(dst, dst, cv::ROTATE_90_COUNTERCLOCKWISE);
+		    cv::imwrite(escapedsavepath, dst);
 			break;
 		}
 		
