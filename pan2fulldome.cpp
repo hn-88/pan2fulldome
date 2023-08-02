@@ -53,22 +53,22 @@ cv::Mat simplePolar(cv::Mat inputMat, int sky_threshold, int outputw)
 	// initialize dst with the same datatype as inputMat
 	// with the "sky" region stretched to fit
 	
-	cv::resize(inputMat, dst, cv::Size(outputw, outputw), 0, 0, cv::INTER_LINEAR);
+	cv::resize(inputMat, dst, cv::Size(outputw, outputw), 0, 0, cv::INTER_CUBIC);
 
 	cv::resize(inputMat, tmp, cv::Size(outputw, outputw-sky_threshold), 0, 0, cv::INTER_CUBIC);
-	tmp.rowRange(1, outputw-sky_threshold).copyTo(dst.rowRange(1, outputw-sky_threshold));
+	tmp.rowRange(1, outputw-sky_threshold).copyTo(dst.rowRange(sky_threshold, outputw));
 
 	cv::Size dstsize = cv::Size(outputw,outputw);
 	cv::Point2f centrepoint( (float)dst.cols / 2, (float)dst.rows / 2 );
 	double maxRadius = (double)dst.cols / 2;
 	    
 	int flags = cv::INTER_LINEAR + cv::WARP_FILL_OUTLIERS + cv::WARP_INVERSE_MAP;
-	cv::rotate(dst, dst, cv::ROTATE_90_COUNTERCLOCKWISE);
+	//cv::rotate(dst, dst, cv::ROTATE_90_COUNTERCLOCKWISE);
 	// this rotate is needed, since opencv's warpPolar() is written that way
 	
-	cv::warpPolar(dst, dst, dstsize, centrepoint, maxRadius, flags);
+	//cv::warpPolar(dst, dst, dstsize, centrepoint, maxRadius, flags);
 		    // one more rotate is needed
-	cv::rotate(dst, dst, cv::ROTATE_90_COUNTERCLOCKWISE);
+	//cv::rotate(dst, dst, cv::ROTATE_90_COUNTERCLOCKWISE);
 	return dst;
 }
 	
