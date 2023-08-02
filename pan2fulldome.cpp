@@ -49,8 +49,13 @@ cv::Mat simplePolar(cv::Mat inputMat, int sky_threshold, int outputw)
 	// sky_threshold has a range 0 to 400. scaling this to 0 to outputw
 	sky_threshold = (int)((float)outputw/400.)*sky_threshold;
 	cv::Mat dst, tmp;
+
+	cv::rotate(inputMat, inputMat, cv::ROTATE_90_COUNTERCLOCKWISE);
+	// this rotate is needed, since opencv's warpPolar() is written that way
+	
 	// initialize dst with the same datatype as inputMat
 	// with the "sky" region stretched to fit
+	
 	cv::resize(inputMat, dst, cv::Size(outputw, outputw), 0, 0, cv::INTER_LINEAR);
 
 	cv::resize(inputMat, tmp, cv::Size(outputw, outputw-sky_threshold), 0, 0, cv::INTER_CUBIC);
