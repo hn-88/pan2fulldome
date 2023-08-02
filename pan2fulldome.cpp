@@ -44,6 +44,30 @@
 
 #define CV_PI   3.1415926535897932384626433832795
 
+cv::Mat simplePolar(cv::Mat inputMat, int sky_threshold, int outputw)
+{
+	// sky_threshold has a range 0 to 400. scaling this to 0 to outputw
+	sky_threshold = (int)((float)outputw/400.)*sky_theshold;
+	cv::Mat dst, tmp;
+	// initialize dst with the same datatype as inputMat
+	// with the "sky" region stretched to fit
+	cv::resize(inputMat, dst, cv::Size(outputw, outputw), 0, 0, cv::INTER_LINEAR);
+
+	cv::resize(inputMat, tmp, cv::Size(outputw, outputw-sky_threshold), 0, 0, cv::INTER_CUBIC);
+	tmp.rowRange(1, outputw-sky_threshold).copyTo(dst.rowRange(1, outputw-sky_threshold));
+
+	cv::Size dstsize = cv::Size(outputw,outputw);
+	cv::Point2f centrepoint( (float)dst.cols / 2, (float)dst.rows / 2 );
+	double maxRadius = (double)dst.cols / 2;
+	    
+	int flags = cv::INTER_LINEAR + cv::WARP_FILL_OUTLIERS + cv::WARP_INVERSE_MAP;
+	cv::warpPolar(dst, dst, dstsize, centrepoint, maxRadius, flags);
+		    // one more rotate is needed
+	cv::rotate(dst, dst, cv::ROTATE_90_COUNTERCLOCKWISE);
+	return dst;
+}
+	
+
 std::string escaped(const std::string& input)
 {
 	// https://stackoverflow.com/questions/48260879/how-to-replace-with-in-c-string
