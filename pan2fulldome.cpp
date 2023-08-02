@@ -63,12 +63,12 @@ cv::Mat simplePolar(cv::Mat inputMat, int sky_threshold, int outputw)
 	double maxRadius = (double)dst.cols / 2;
 	    
 	int flags = cv::INTER_LINEAR + cv::WARP_FILL_OUTLIERS + cv::WARP_INVERSE_MAP;
-	//cv::rotate(dst, dst, cv::ROTATE_90_COUNTERCLOCKWISE);
+	cv::rotate(dst, dst, cv::ROTATE_90_COUNTERCLOCKWISE);
 	// this rotate is needed, since opencv's warpPolar() is written that way
 	
-	//cv::warpPolar(dst, dst, dstsize, centrepoint, maxRadius, flags);
+	cv::warpPolar(dst, dst, dstsize, centrepoint, maxRadius, flags);
 		    // one more rotate is needed
-	//cv::rotate(dst, dst, cv::ROTATE_90_COUNTERCLOCKWISE);
+	cv::rotate(dst, dst, cv::ROTATE_90_COUNTERCLOCKWISE);
 	return dst;
 }
 	
@@ -214,7 +214,7 @@ cv::Mat dst2, dst3, dsts;	// temp dst, for eachvid
 		cvui::button(frame, 140, 30, dstdisplay, dstdisplay, dstdisplay);
 
 		if (cvui::trackbar(frame, 15, 600, 165, &sky_threshold, 0, 400)) {
-			dstdisplay = simplePolar(img, sky_threshold, 400);;
+			dstdisplay = simplePolar(img, sky_threshold, 400);
 		}
 
 		if (cvui::button(frame, 250, 650, "Close")) {
@@ -223,8 +223,9 @@ cv::Mat dst2, dst3, dsts;	// temp dst, for eachvid
 		}
 		if (cvui::button(frame, 200, 650, "Save")) {
 		    // save button was clicked
-		    cv::warpPolar(dst, dst, dstsize, centrepoint, maxRadius, flags);
-		    cv::rotate(dst, dst, cv::ROTATE_90_COUNTERCLOCKWISE);
+		    dst = simplePolar(img, sky_threshold, outputw);
+		    //cv::warpPolar(dst, dst, dstsize, centrepoint, maxRadius, flags);
+		    //cv::rotate(dst, dst, cv::ROTATE_90_COUNTERCLOCKWISE);
 		    cv::imwrite(escapedsavepath, dst);
 			//break; don't close the window yet.
 		}
