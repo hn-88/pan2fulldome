@@ -168,7 +168,7 @@ cv::Mat dst2, dst3, dsts;	// temp dst, for eachvid
 	    /*
 	cv::rotate(img, img, cv::ROTATE_90_COUNTERCLOCKWISE);
 	cv::resize(img, dstdisplay, cv::Size(400,400), 0, 0, cv::INTER_CUBIC);
-	cv::resize(img, dst, cv::Size(outputw, outputw), 0, 0, cv::INTER_CUBIC);
+	cv::resize(img, dst, cv::Size(outputw, outputw), 0, 0, cv::INTER_CUBIC); */
 		
 	cv::Size dstdisplaysize = cv::Size(400,400);
 	cv::Size dstsize = cv::Size(outputw,outputw);
@@ -178,6 +178,7 @@ cv::Mat dst2, dst3, dsts;	// temp dst, for eachvid
 	double maxRadius = (double)dst.cols / 2;
 	    
 	int flags = cv::INTER_LINEAR + cv::WARP_FILL_OUTLIERS + cv::WARP_INVERSE_MAP;
+	    /*
 	cv::warpPolar(dstdisplay, dstdisplay, dstdisplaysize, centrepointdisp, maxRadiusdisp, flags);
 		    // one more rotate is needed
 	cv::rotate(dstdisplay, dstdisplay, cv::ROTATE_90_COUNTERCLOCKWISE);
