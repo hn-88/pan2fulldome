@@ -213,7 +213,9 @@ cv::Mat dst2, dst3, dsts;	// temp dst, for eachvid
 		cvui::text(frame, 350, 10, "Preview");
 		cvui::button(frame, 140, 30, dstdisplay, dstdisplay, dstdisplay);
 
-		cvui::trackbar(frame, 15, 600, 165, &sky_threshold, 0, 400);
+		if (cvui::trackbar(frame, 15, 600, 165, &sky_threshold, 0, 400)) {
+			dstdisplay = simplePolar(img, sky_threshold, 400);;
+		}
 
 		if (cvui::button(frame, 250, 650, "Close")) {
 		    // close button was clicked
