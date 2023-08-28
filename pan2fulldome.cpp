@@ -62,7 +62,7 @@ cv::Mat simplePolar(cv::Mat inputMat, int sky_threshold, int horizontal_extent, 
 	cv::resize(inputMat, tmp, cv::Size(horizontal_extent, outputw-sky_threshold), 0, 0, cv::INTER_CUBIC);
 	//tmp.rowRange(1, outputw-sky_threshold).copyTo(dst.rowRange(sky_threshold+1, outputw));
 	int x =  (int)(outputw-horizontal_extent)/2;
-	int y =  outputw-sky_threshold;
+	int y =  sky_threshold;
 	tmp.copyTo(dst(cv::Rect(x,y,tmp.cols, tmp.rows)));
 	
 	cv::Point2f centrepoint( (float)dst.cols / 2, (float)dst.rows / 2 );
