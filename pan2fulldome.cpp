@@ -40,7 +40,7 @@
 #define CVUI_IMPLEMENTATION
 #include "cvui.h"
 
-#define WINDOW_NAME "CVUI"
+#define WINDOW_NAME "PAN2FULLDOME - HIT <esc> TO CLOSE"
 
 #define CV_PI   3.1415926535897932384626433832795
 
@@ -59,12 +59,11 @@ cv::Mat simplePolar(cv::Mat inputMat, int sky_threshold, int outputw)
 
 	cv::resize(inputMat, tmp, cv::Size(outputw, outputw-sky_threshold), 0, 0, cv::INTER_CUBIC);
 	tmp.rowRange(1, outputw-sky_threshold).copyTo(dst.rowRange(sky_threshold+1, outputw));
-
 	
 	cv::Point2f centrepoint( (float)dst.cols / 2, (float)dst.rows / 2 );
 	double maxRadius = (double)dst.cols / 2;
 	    
-	int flags = cv::INTER_LINEAR + cv::WARP_FILL_OUTLIERS + cv::WARP_INVERSE_MAP;
+	int flags = cv::INTER_CUBIC + cv::WARP_FILL_OUTLIERS + cv::WARP_INVERSE_MAP;
 	cv::rotate(dst, dst, cv::ROTATE_90_COUNTERCLOCKWISE);
 	// this rotate is needed, since opencv's warpPolar() is written that way
 	
@@ -183,13 +182,7 @@ cv::Mat dst2, dst3, dsts;	// temp dst, for eachvid
 	cv::Point2f centrepoint( (float)dst.cols / 2, (float)dst.rows / 2 );
 	double maxRadiusdisp = (double)dstdisplay.cols / 2;
 	double maxRadius = (double)dst.cols / 2;
-	    
-	int flags = cv::INTER_LINEAR + cv::WARP_FILL_OUTLIERS + cv::WARP_INVERSE_MAP;
-	    /*
-	cv::warpPolar(dstdisplay, dstdisplay, dstdisplaysize, centrepointdisp, maxRadiusdisp, flags);
-		    // one more rotate is needed
-	cv::rotate(dstdisplay, dstdisplay, cv::ROTATE_90_COUNTERCLOCKWISE);
-	    */
+	
 	dstdisplay = simplePolar(img, 0, 400);
 	
 	if(img.empty())
@@ -197,12 +190,12 @@ cv::Mat dst2, dst3, dsts;	// temp dst, for eachvid
 		 std::cout << "Could not read the image: " << escapedpath << std::endl;
 		 return 1;
 		 }
-	//cv::imshow("Input image", img);
 	
 	////////// CVUI ///////////////
-	    // Create a frame where components will be rendered to.
+	// Create a frame where components will be rendered to.
 	cv::Mat frame = cv::Mat(680, 680, CV_8UC3);
 	int sky_threshold = 0;
+	int horizontal_extent = 400;
 
 	// Init cvui and tell it to create a OpenCV window, i.e. cv::namedWindow(WINDOW_NAME).
 	cvui::init(WINDOW_NAME);
@@ -215,7 +208,13 @@ cv::Mat dst2, dst3, dsts;	// temp dst, for eachvid
 		cvui::text(frame, 350, 10, "Preview");
 		cvui::button(frame, 140, 30, dstdisplay, dstdisplay, dstdisplay);
 
+		cvui::text(frame, 65, 550, "Sky");
 		if (cvui::trackbar(frame, 15, 600, 165, &sky_threshold, 0, 400)) {
+			dstdisplay = simplePolar(img, sky_threshold, 400);
+		}
+
+		cvui::text(frame, 265, 550, "Horizontal extent");
+		if (cvui::trackbar(frame, 200, 600, 165, &horizontal_extent, 0, 400)) {
 			dstdisplay = simplePolar(img, sky_threshold, 400);
 		}
 
@@ -226,8 +225,6 @@ cv::Mat dst2, dst3, dsts;	// temp dst, for eachvid
 		if (cvui::button(frame, 200, 650, "Save")) {
 		    // save button was clicked
 		    dst = simplePolar(img, sky_threshold, outputw);
-		    //cv::warpPolar(dst, dst, dstsize, centrepoint, maxRadius, flags);
-		    //cv::rotate(dst, dst, cv::ROTATE_90_COUNTERCLOCKWISE);
 		    cv::imwrite(escapedsavepath, dst);
 			//break; don't close the window yet.
 		}
@@ -235,7 +232,7 @@ cv::Mat dst2, dst3, dsts;	// temp dst, for eachvid
 		// Update cvui stuff and show everything on the screen
 		cvui::imshow(WINDOW_NAME, frame);
 
-		if (cv::waitKey(20) == 27) {
+		if (cv::waitKey(20) == 27) { // ESC was pressed
 			break;
 		}
 		
