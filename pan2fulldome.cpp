@@ -48,17 +48,19 @@ cv::Mat simplePolar(cv::Mat inputMat, int sky_threshold, int outputw)
 {
 	// sky_threshold has a range 0 to 400. scaling this to 0 to outputw
 	sky_threshold = (int)((float)outputw/400.)*sky_threshold;
-	cv::Mat dst, tmp;
-	
+	cv::Mat dst, tmp, sky;
+	cv::Size dstsize = cv::Size(outputw,outputw);
 	// initialize dst with the same datatype as inputMat
+	// cv::resize(inputMat, dst, dstsize, 0, 0, cv::INTER_CUBIC);
 	// with the "sky" region stretched to fit
-	
-	cv::resize(inputMat, dst, cv::Size(outputw, outputw), 0, 0, cv::INTER_CUBIC);
+	// we take the sky to be the top 5 pixels of inputMat
+	inputMat.rowRange(1,5).copyTo(sky);
+	cv::resize(sky, dst, dstsize, 0, 0, cv::INTER_CUBIC);
 
 	cv::resize(inputMat, tmp, cv::Size(outputw, outputw-sky_threshold), 0, 0, cv::INTER_CUBIC);
 	tmp.rowRange(1, outputw-sky_threshold).copyTo(dst.rowRange(sky_threshold+1, outputw));
 
-	cv::Size dstsize = cv::Size(outputw,outputw);
+	
 	cv::Point2f centrepoint( (float)dst.cols / 2, (float)dst.rows / 2 );
 	double maxRadius = (double)dst.cols / 2;
 	    
