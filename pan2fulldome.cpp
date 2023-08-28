@@ -208,13 +208,13 @@ cv::Mat dst2, dst3, dsts;	// temp dst, for eachvid
 		cvui::text(frame, 350, 10, "Preview");
 		cvui::button(frame, 140, 30, dstdisplay, dstdisplay, dstdisplay);
 
-		cvui::text(frame, 65, 550, "Sky");
+		cvui::text(frame, 65, 580, "Sky");
 		if (cvui::trackbar(frame, 15, 600, 165, &sky_threshold, 0, 400)) {
 			dstdisplay = simplePolar(img, sky_threshold, 400);
 		}
 
-		cvui::text(frame, 265, 550, "Horizontal extent");
-		if (cvui::trackbar(frame, 200, 600, 165, &horizontal_extent, 0, 400)) {
+		cvui::text(frame, 265, 580, "Horizontal extent");
+		if (cvui::trackbar(frame, 230, 600, 165, &horizontal_extent, 0, 400)) {
 			dstdisplay = simplePolar(img, sky_threshold, 400);
 		}
 
