@@ -188,7 +188,7 @@ cv::Mat dst2, dst3, dsts;	// temp dst, for eachvid
 	double maxRadiusdisp = (double)dstdisplay.cols / 2;
 	double maxRadius = (double)dst.cols / 2;
 	
-	dstdisplay = simplePolar(img, 0, 400);
+	dstdisplay = simplePolar(img, 0, 360, 400);
 	
 	if(img.empty())
 		 {
@@ -229,7 +229,7 @@ cv::Mat dst2, dst3, dsts;	// temp dst, for eachvid
 		}
 		if (cvui::button(frame, 200, 650, "Save")) {
 		    // save button was clicked
-		    dst = simplePolar(img, sky_threshold, outputw);
+		    dst = simplePolar(img, sky_threshold, horizontal_extent, outputw);
 		    cv::imwrite(escapedsavepath, dst);
 			//break; don't close the window yet.
 		}
