@@ -44,6 +44,33 @@
 
 #define CV_PI   3.1415926535897932384626433832795
 
+cv::Mat equirectToFisheye(cv::Mat inputMat, int sky_threshold, int horizontal_extent, int outputw)
+{
+	// sky_threshold has a range 0 to 400. scaling this to 0 to outputw
+	sky_threshold = (int)((float)outputw/400.)*sky_threshold;
+	// horizontal_extent has a range 1 to 360. scaling this to 0 to outputw
+	horizontal_extent = (int)((float)outputw/360.)*horizontal_extent;
+	cv::Mat dst, tmp, sky;
+	cv::Size dstsize = cv::Size(outputw,outputw);
+	// initialize dst with the same datatype as inputMat
+	// cv::resize(inputMat, dst, dstsize, 0, 0, cv::INTER_CUBIC);
+	// with the "sky" region stretched to fit
+	// For now, we take the sky to be the top 5 pixels of inputMat
+	inputMat.rowRange(1,5).copyTo(sky);
+	cv::resize(sky, dst, dstsize, 0, 0, cv::INTER_CUBIC);
+
+	cv::resize(inputMat, tmp, cv::Size(horizontal_extent, outputw-sky_threshold), 0, 0, cv::INTER_CUBIC);
+	//tmp.rowRange(1, outputw-sky_threshold).copyTo(dst.rowRange(sky_threshold+1, outputw));
+	int x =  (int)(outputw-horizontal_extent)/2;
+	int y =  sky_threshold;
+	if (x<2) { x=0;}
+	if (y<398) {// otherwise don't copy, since tmp may be too small
+	tmp.copyTo(dst(cv::Rect(x,y,tmp.cols, tmp.rows)));
+	}
+	// todo the equirectToFisheye here
+	return dst;
+}
+
 cv::Mat simplePolar(cv::Mat inputMat, int sky_threshold, int horizontal_extent, int outputw)
 {
 	// sky_threshold has a range 0 to 400. scaling this to 0 to outputw
@@ -178,20 +205,11 @@ cv::Mat dst2, dst3, dsts;	// temp dst, for eachvid
 	
 	outputw = atoi(lTmp);
 	cv::Mat img = cv::imread(escapedpath, cv::IMREAD_COLOR);
-	//cv::rotate(dst, img, cv::ROTATE_90_CLOCKWISE);   This results in a little planet view
-	    /*
-	cv::rotate(img, img, cv::ROTATE_90_COUNTERCLOCKWISE);
-	cv::resize(img, dstdisplay, cv::Size(400,400), 0, 0, cv::INTER_CUBIC);
-	cv::resize(img, dst, cv::Size(outputw, outputw), 0, 0, cv::INTER_CUBIC); */
 		
 	cv::Size dstdisplaysize = cv::Size(400,400);
 	cv::Size dstsize = cv::Size(outputw,outputw);
-	cv::Point2f centrepointdisp( (float)dstdisplay.cols / 2, (float)dstdisplay.rows / 2 );
-	cv::Point2f centrepoint( (float)dst.cols / 2, (float)dst.rows / 2 );
-	double maxRadiusdisp = (double)dstdisplay.cols / 2;
-	double maxRadius = (double)dst.cols / 2;
 	
-	dstdisplay = simplePolar(img, 0, 360, 400);
+	dstdisplay = equirectToFisheye(img, 0, 360, 400);
 	
 	if(img.empty())
 		 {
@@ -218,12 +236,12 @@ cv::Mat dst2, dst3, dsts;	// temp dst, for eachvid
 
 		cvui::text(frame, 65, 580, "Sky");
 		if (cvui::trackbar(frame, 15, 600, 165, &sky_threshold, 0, 400)) {
-			dstdisplay = simplePolar(img, sky_threshold, horizontal_extent, 400);
+			dstdisplay = equirectToFisheye(img, sky_threshold, horizontal_extent, 400);
 		}
 
 		cvui::text(frame, 265, 580, "Horizontal extent");
 		if (cvui::trackbar(frame, 230, 600, 165, &horizontal_extent, 1, 360)) {
-			dstdisplay = simplePolar(img, sky_threshold, horizontal_extent, 400);
+			dstdisplay = equirectToFisheye(img, sky_threshold, horizontal_extent, 400);
 		}
 
 		if (cvui::button(frame, 250, 650, "Close")) {
@@ -232,7 +250,7 @@ cv::Mat dst2, dst3, dsts;	// temp dst, for eachvid
 		}
 		if (cvui::button(frame, 200, 650, "Save")) {
 		    // save button was clicked
-		    dst = simplePolar(img, sky_threshold, horizontal_extent, outputw);
+		    dst = equirectToFisheye(img, sky_threshold, horizontal_extent, outputw);
 		    cv::imwrite(escapedsavepath, dst);
 			//break; don't close the window yet.
 		}
