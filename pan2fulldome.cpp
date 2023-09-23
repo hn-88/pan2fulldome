@@ -46,13 +46,19 @@
 
 cv::Mat equirectToFisheye(cv::Mat inputMat, int sky_threshold, int horizontal_extent, int outputw)
 {
+	equirectw = 8192;
+	equirecth = 4096;
+	// set intermediate equirect image size
+	//if (outputw < 1025) 
 	// sky_threshold has a range 0 to 400. scaling this to 0 to outputw
 	sky_threshold = (int)((float)outputw/400.)*sky_threshold;
 	// horizontal_extent has a range 0 to 360. scaling this to 0 to outputw
 	// https://stackoverflow.com/questions/2745074/fast-ceiling-of-an-integer-division-in-c-c
 	horizontal_extent = ceil(((float)outputw/360.)*(float)horizontal_extent);
 	cv::Mat dst, tmp, sky;
-	cv::Size dstsize = cv::Size(outputw,outputw);
+	//cv::Size dstsize = cv::Size(outputw,outputw);
+	// for testing large Mat, 
+	cv::Size dstsize = cv::Size(equirectw,equirecth);
 	// initialize dst with the same datatype as inputMat
 	// cv::resize(inputMat, dst, dstsize, 0, 0, cv::INTER_CUBIC);
 	// with the "sky" region stretched to fit
@@ -69,6 +75,8 @@ cv::Mat equirectToFisheye(cv::Mat inputMat, int sky_threshold, int horizontal_ex
 	tmp.copyTo(dst(cv::Rect(x,y,tmp.cols, tmp.rows)));
 	}
 	// todo the equirectToFisheye here
+	// "horiz extent" would determine the "zoom" level
+	// "sky" would determine the angle tilt above or below the horizon
 	return dst;
 }
 
@@ -258,8 +266,23 @@ cv::Mat dst2, dst3, dsts;	// temp dst, for eachvid
 		if (cvui::button(frame, 200, 650, "Save")) {
 		    // save button was clicked
 		    dst = equirectToFisheye(img, sky_threshold, horizontal_extent, outputw);
-		    cv::imwrite(escapedsavepath, dst);
-			//break; don't close the window yet.
+			// ask for filename
+			char const * FilterPatternsimgsave[2] =  { "*.jpg","*.png" };
+			char const * SaveFileNameimg;
+		
+			SaveFileNameimg = tinyfd_saveFileDialog(
+				"Output image file",
+				"",
+				2,
+				FilterPatternsimgsave,
+				NULL,
+				0);
+
+			if (SaveFileNameimg) {			
+				escapedsavepath = escaped(std::string(SaveFileNameimg));
+				////////////////////
+			    cv::imwrite(escapedsavepath, dst);
+			}
 		}
 		
 		// Update cvui stuff and show everything on the screen
