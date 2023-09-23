@@ -46,8 +46,8 @@
 
 cv::Mat equirectToFisheye(cv::Mat inputMat, int sky_threshold, int horizontal_extent, int outputw)
 {
-	int equirectw = 4096;
-	int equirecth = 4096;
+	int equirectw = 8192;
+	int equirecth = 8192;
 	// set intermediate equirect image size
 	//if (outputw < 1025) 
 	// sky_threshold has a range 0 to 400. scaling this to 0 to outputw
