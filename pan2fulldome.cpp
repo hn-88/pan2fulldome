@@ -48,7 +48,8 @@ cv::Mat equirectToFisheye(cv::Mat inputMat, int sky_threshold, int horizontal_ex
 {
 	// sky_threshold has a range 0 to 400. scaling this to 0 to outputw
 	sky_threshold = (int)((float)outputw/400.)*sky_threshold;
-	// horizontal_extent has a range 1 to 360. scaling this to 0 to outputw
+	// horizontal_extent has a range 0 to 360. scaling this to 0 to outputw
+	// https://stackoverflow.com/questions/2745074/fast-ceiling-of-an-integer-division-in-c-c
 	horizontal_extent = (int)((float)outputw/360.)*horizontal_extent;
 	cv::Mat dst, tmp, sky;
 	cv::Size dstsize = cv::Size(outputw,outputw);
@@ -236,11 +237,17 @@ cv::Mat dst2, dst3, dsts;	// temp dst, for eachvid
 
 		cvui::text(frame, 65, 580, "Sky");
 		if (cvui::trackbar(frame, 15, 600, 165, &sky_threshold, 0, 400)) {
+			if (sky_threshold > 395) { 
+				sky_threshold = 395;  // to prevent crashes
+			}
 			dstdisplay = equirectToFisheye(img, sky_threshold, horizontal_extent, 400);
 		}
 
 		cvui::text(frame, 265, 580, "Horizontal extent");
 		if (cvui::trackbar(frame, 230, 600, 165, &horizontal_extent, 1, 360)) {
+			if (horizontal_extent < 5) {
+				horizontal_extent = 5;   // to prevent crashes
+			}
 			dstdisplay = equirectToFisheye(img, sky_threshold, horizontal_extent, 400);
 		}
 
