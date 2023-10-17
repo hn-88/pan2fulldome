@@ -81,7 +81,7 @@ cv::Mat equirectToFisheye(cv::Mat inputMat, int sky_threshold, int horizontal_ex
 
 	cv::resize(inputMat, tmp, cv::Size(horizontal_extent, equirecth-sky_threshold), 0, 0, cv::INTER_CUBIC);
 	//tmp.rowRange(1, outputw-sky_threshold).copyTo(dst.rowRange(sky_threshold+1, outputw));
-	int x =  (int)(outputw-horizontal_extent)/2;
+	int x =  (int)(equirectw-horizontal_extent)/2;
 	int y =  sky_threshold;
 	if (x<2) { x=0;}
 	if (y<398) {// otherwise don't copy, since tmp may be too small
