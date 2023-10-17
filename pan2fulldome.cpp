@@ -84,7 +84,7 @@ cv::Mat equirectToFisheye(cv::Mat inputMat, int sky_threshold, int horizontal_ex
 	cv::resize(sky, equirect, equirectsize, 0, 0, cv::INTER_LINEAR);
 	// we want the tmp to contain the inputMat without any distortion, 
 	// resized with x/y aspect ratio unchanged.
-	cv::resize(inputMat, tmp, cv::Size(horizontal_extent, ceil(inputMat.rows*((float)horizontal_extent/(float)inputMat.cols)), 0, 0, cv::INTER_CUBIC);
+	cv::resize(inputMat, tmp, cv::Size(horizontal_extent, ceil(inputMat.rows*(float)horizontal_extent/(float)inputMat.cols)), 0, 0, cv::INTER_CUBIC);
 	//tmp.rowRange(1, outputw-sky_threshold).copyTo(dst.rowRange(sky_threshold+1, outputw));
 	int x =  (int)(equirectw-horizontal_extent)/2;
 	int y =  sky_threshold; // we should use a different slider for this
