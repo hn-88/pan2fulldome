@@ -49,6 +49,10 @@ cv::Mat equirectToFisheye(cv::Mat inputMat, int sky_threshold, int horizontal_ex
 	int equirectw = 8192;
 	int equirecth = 4096;
 	// set intermediate equirect image size
+	if (outputw < 513) {
+		equirectw=1024;
+		equirecth=512;
+	}
 	if (outputw < 1025) {
 		equirectw=2048;
 		equirecth=1024;
@@ -57,8 +61,8 @@ cv::Mat equirectToFisheye(cv::Mat inputMat, int sky_threshold, int horizontal_ex
 		equirectw=4096;
 		equirecth=2048;
 	}
-	// sky_threshold has a range 0 to 400. scaling this to 0 to equirecth
-	sky_threshold = (int)((float)equirecth/400.)*sky_threshold;
+	// sky_threshold has a range 0 to 400. scaling this to 0 to Input Mat h
+	sky_threshold = (int)((float)inputMat.rows/400.)*sky_threshold;
 	// horizontal_extent has a range 0 to 360. scaling this to 0 to equirectw
 	// https://stackoverflow.com/questions/2745074/fast-ceiling-of-an-integer-division-in-c-c
 	horizontal_extent = ceil(((float)equirectw/360.)*(float)horizontal_extent);
@@ -84,7 +88,7 @@ cv::Mat equirectToFisheye(cv::Mat inputMat, int sky_threshold, int horizontal_ex
 	int x =  (int)(equirectw-horizontal_extent)/2;
 	int y =  sky_threshold;
 	if (x<2) { x=0;}
-	if (y<398) {// otherwise don't copy, since tmp may be too small
+	if (y<(inputMat.rows-2)) {// otherwise don't copy, since tmp may be too small
 		tmp.copyTo(equirect(cv::Rect(x,y,tmp.cols, tmp.rows)));
 	}
 	// todo the equirectToFisheye here
