@@ -47,35 +47,48 @@
 cv::Mat equirectToFisheye(cv::Mat inputMat, int sky_threshold, int horizontal_extent, int outputw)
 {
 	int equirectw = 8192;
-	int equirecth = 8192;
+	int equirecth = 4096;
 	// set intermediate equirect image size
-	//if (outputw < 1025) 
-	// sky_threshold has a range 0 to 400. scaling this to 0 to outputw
-	sky_threshold = (int)((float)outputw/400.)*sky_threshold;
-	// horizontal_extent has a range 0 to 360. scaling this to 0 to outputw
+	if (outputw < 1025) {
+		equirectw=2048;
+		equirecth=1024;
+	}
+	if (outputw < 2049) {
+		equirectw=4096;
+		equirecth=2048;
+	}
+	// sky_threshold has a range 0 to 400. scaling this to 0 to equirecth
+	sky_threshold = (int)((float)equirecth/400.)*sky_threshold;
+	// horizontal_extent has a range 0 to 360. scaling this to 0 to equirectw
 	// https://stackoverflow.com/questions/2745074/fast-ceiling-of-an-integer-division-in-c-c
-	horizontal_extent = ceil(((float)outputw/360.)*(float)horizontal_extent);
-	cv::Mat dst, dst2, tmp, sky;
+	horizontal_extent = ceil(((float)equirectw/360.)*(float)horizontal_extent);
+	cv::Mat dst, dst2, tmp, sky, equirect;
 	cv::Size dstsize = cv::Size(outputw,outputw);
 	// for testing large Mat, 
-	cv::Size dstsize2 = cv::Size(equirectw,equirecth);
+	cv::Size equirectsize = cv::Size(equirectw,equirecth);
 	// initialize dst with the same datatype as inputMat
 	// cv::resize(inputMat, dst, dstsize, 0, 0, cv::INTER_CUBIC);
 	// with the "sky" region stretched to fit
-	// For now, we take the sky to be the top 5 pixels of inputMat
-	inputMat.rowRange(1,5).copyTo(sky);
-	cv::resize(sky, dst, dstsize, 0, 0, cv::INTER_CUBIC);
-	cv::resize(sky, dst2, dstsize2, 0, 0, cv::INTER_CUBIC);
+	// For now, we take the sky to be the top 5 pixels of inputMat if sky_threshold is very small
+	if (sky_threshold < 5) {
+		inputMat.rowRange(0,5).copyTo(sky);
+	}
+	else {
+		inputMat.rowRange(0,sky_threshold).copyTo(sky);
+	}
+	cv::resize(sky, dst, dstsize, 0, 0, cv::INTER_LINEAR);
+	cv::resize(sky, equirect, equirectsize, 0, 0, cv::INTER_LINEAR);
 
-	cv::resize(inputMat, tmp, cv::Size(horizontal_extent, outputw-sky_threshold), 0, 0, cv::INTER_CUBIC);
+	cv::resize(inputMat, tmp, cv::Size(horizontal_extent, equirecth-sky_threshold), 0, 0, cv::INTER_CUBIC);
 	//tmp.rowRange(1, outputw-sky_threshold).copyTo(dst.rowRange(sky_threshold+1, outputw));
 	int x =  (int)(outputw-horizontal_extent)/2;
 	int y =  sky_threshold;
 	if (x<2) { x=0;}
 	if (y<398) {// otherwise don't copy, since tmp may be too small
-	tmp.copyTo(dst(cv::Rect(x,y,tmp.cols, tmp.rows)));
+		tmp.copyTo(equirect(cv::Rect(x,y,tmp.cols, tmp.rows)));
 	}
 	// todo the equirectToFisheye here
+	cv::resize(equirect, dst, dstsize, 0, 0, cv::INTER_LINEAR);// this is just for testing.
 	// "horiz extent" would determine the "zoom" level
 	// "sky" would determine the angle tilt above or below the horizon
 	return dst;
