@@ -66,7 +66,7 @@ cv::Mat equirectToFisheye(cv::Mat inputMat, int sky_threshold, int horizontal_ex
 	// horizontal_extent has a range 0 to 360. scaling this to 0 to equirectw
 	// https://stackoverflow.com/questions/2745074/fast-ceiling-of-an-integer-division-in-c-c
 	horizontal_extent = ceil(((float)equirectw/360.)*(float)horizontal_extent);
-	cv::Mat dst, dst2, tmp, sky, equirect;
+	cv::Mat dst, dst2, tmp, tmpcropped, sky, equirect;
 	cv::Size dstsize = cv::Size(outputw,outputw);
 	// for testing large Mat, 
 	cv::Size equirectsize = cv::Size(equirectw,equirecth);
@@ -88,9 +88,18 @@ cv::Mat equirectToFisheye(cv::Mat inputMat, int sky_threshold, int horizontal_ex
 	//tmp.rowRange(1, outputw-sky_threshold).copyTo(dst.rowRange(sky_threshold+1, outputw));
 	int x =  (int)(equirectw-horizontal_extent)/2;
 	int y =  sky_threshold; // we should use a different slider for this
+	if ((y+tmp.rows) > equirect.rows) {
+		// then we have to truncate tmp
+		// and remember first y, then x
+		tmp2 = tmp(Range(0,equirect.rows-y), Range(0,horizontal_extent));
+	}
+	else {
+		tmp2 = tmp;
+	}
+		
 	if (x<2) { x=0;}
 	if (y<(inputMat.rows-2)) {// otherwise don't copy, since tmp may be too small
-		tmp.copyTo(equirect(cv::Rect(x,y,tmp.cols, tmp.rows)));
+		tmp2.copyTo(equirect(cv::Rect(x,y,tmp.cols, tmp.rows)));
 	}
 	// todo the equirectToFisheye here
 	cv::resize(equirect, dst, dstsize, 0, 0, cv::INTER_LINEAR);// this is just for testing.
