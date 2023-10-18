@@ -259,6 +259,8 @@ cv::Mat dst2, dst3, dsts;	// temp dst, for eachvid
 	cv::Mat frame = cv::Mat(680, 680, CV_8UC3);
 	int sky_threshold = 0;
 	int horizontal_extent = 360;
+	int move_down = 0;
+	int rotate_down = -160;
 
 	// Init cvui and tell it to create a OpenCV window, i.e. cv::namedWindow(WINDOW_NAME).
 	cvui::init(WINDOW_NAME);
@@ -271,23 +273,39 @@ cv::Mat dst2, dst3, dsts;	// temp dst, for eachvid
 		cvui::text(frame, 350, 10, "Preview");
 		cvui::button(frame, 140, 30, dstdisplay, dstdisplay, dstdisplay);
 
-		cvui::text(frame, 65, 580, "Sky");
-		if (cvui::trackbar(frame, 15, 600, 165, &sky_threshold, 0, 400)) {
+		cvui::text(frame, 20, 580, "Sky");
+		if (cvui::trackbar(frame, 15, 600, 135, &sky_threshold, 0, 400)) {
 			if (sky_threshold > 395) { 
 				sky_threshold = 395;  // to prevent crashes
 			}
 			dstdisplay = equirectToFisheye(img, sky_threshold, horizontal_extent, 400);
 		}
 
-		cvui::text(frame, 265, 580, "Horizontal extent");
-		if (cvui::trackbar(frame, 230, 600, 165, &horizontal_extent, 1, 360)) {
+		cvui::text(frame, 170, 580, "Horizontal extent");
+		if (cvui::trackbar(frame, 165, 600, 135, &horizontal_extent, 1, 360)) {
 			if (horizontal_extent < 5) {
 				horizontal_extent = 5;   // to prevent crashes
 			}
 			dstdisplay = equirectToFisheye(img, sky_threshold, horizontal_extent, 400);
 		}
 
-		if (cvui::button(frame, 250, 650, "Close")) {
+		cvui::text(frame, 320, 580, "Move down");
+		if (cvui::trackbar(frame, 315, 600, 135, &move_down, 1, 360)) {
+			if (move_down > 355) {
+				move_down = 355;   // to prevent crashes
+			}
+			dstdisplay = equirectToFisheye(img, sky_threshold, horizontal_extent, 400);
+		}
+
+		cvui::text(frame, 470, 580, "Rotate down");
+		if (cvui::trackbar(frame, 465, 600, 200, &rotate_down, -180, 180)) {
+			if (rotate_down > 355) {
+				rotate_down = 355;   // to prevent crashes
+			}
+			dstdisplay = equirectToFisheye(img, sky_threshold, horizontal_extent, 400);
+		}
+
+		if (cvui::button(frame, 350, 650, "Close")) {
 		    // close button was clicked
 			break;
 		}
