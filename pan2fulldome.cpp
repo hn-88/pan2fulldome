@@ -66,8 +66,8 @@ cv::Mat equirectToFisheye(cv::Mat inputMat, int sky_threshold, int horizontal_ex
 	// horizontal_extent has a range 0 to 360. scaling this to 0 to equirectw
 	// https://stackoverflow.com/questions/2745074/fast-ceiling-of-an-integer-division-in-c-c
 	horizontal_extent = ceil(((float)equirectw/360.)*(float)horizontal_extent);
-	// move_down has a range 0 to 400. scaling this to 0 to Input Mat h
-	move_down = (int)((float)inputMat.rows/400.)*move_down;
+	// move_down has a range 0 to 400. scaling this to 0 to half of equirecth
+	move_down = (int)((float)equirecth/800.)*move_down;
 	
 	cv::Mat dst, dst2, tmp, tmpcropped, sky, equirect;
 	cv::Size dstsize = cv::Size(outputw,outputw);
