@@ -44,7 +44,7 @@
 
 #define CV_PI   3.1415926535897932384626433832795
 
-cv::Mat equirectToFisheye(cv::Mat inputMat, int sky_threshold, int horizontal_extent, int outputw)
+cv::Mat equirectToFisheye(cv::Mat inputMat, int sky_threshold, int horizontal_extent, int move_down, int rotate_down, int outputw)
 {
 	int equirectw = 8192;
 	int equirecth = 4096;
@@ -246,7 +246,7 @@ cv::Mat dst2, dst3, dsts;	// temp dst, for eachvid
 	cv::Size dstdisplaysize = cv::Size(400,400);
 	cv::Size dstsize = cv::Size(outputw,outputw);
 	
-	dstdisplay = equirectToFisheye(img, 0, 360, 400);
+	dstdisplay = equirectToFisheye(img, 0, 360, 0, -160, 400);
 	
 	if(img.empty())
 		 {
@@ -273,12 +273,12 @@ cv::Mat dst2, dst3, dsts;	// temp dst, for eachvid
 		cvui::text(frame, 350, 10, "Preview");
 		cvui::button(frame, 140, 30, dstdisplay, dstdisplay, dstdisplay);
 
-		cvui::text(frame, 20, 580, "Sky");
+		cvui::text(frame, 35, 580, "Sky");
 		if (cvui::trackbar(frame, 15, 600, 135, &sky_threshold, 0, 400)) {
 			if (sky_threshold > 395) { 
 				sky_threshold = 395;  // to prevent crashes
 			}
-			dstdisplay = equirectToFisheye(img, sky_threshold, horizontal_extent, 400);
+			dstdisplay = equirectToFisheye(img, sky_threshold, horizontal_extent, move_down, rotate_now, 400);
 		}
 
 		cvui::text(frame, 170, 580, "Horizontal extent");
@@ -286,23 +286,23 @@ cv::Mat dst2, dst3, dsts;	// temp dst, for eachvid
 			if (horizontal_extent < 5) {
 				horizontal_extent = 5;   // to prevent crashes
 			}
-			dstdisplay = equirectToFisheye(img, sky_threshold, horizontal_extent, 400);
+			dstdisplay = equirectToFisheye(img, sky_threshold, horizontal_extent, move_down, rotate_now, 400);
 		}
 
-		cvui::text(frame, 320, 580, "Move down");
+		cvui::text(frame, 335, 580, "Move down");
 		if (cvui::trackbar(frame, 315, 600, 135, &move_down, 1, 360)) {
 			if (move_down > 355) {
 				move_down = 355;   // to prevent crashes
 			}
-			dstdisplay = equirectToFisheye(img, sky_threshold, horizontal_extent, 400);
+			dstdisplay = equirectToFisheye(img, sky_threshold, horizontal_extent, move_down, rotate_now, 400);
 		}
 
-		cvui::text(frame, 470, 580, "Rotate down");
+		cvui::text(frame, 485, 580, "Rotate down");
 		if (cvui::trackbar(frame, 465, 600, 200, &rotate_down, -180, 180)) {
 			if (rotate_down > 355) {
 				rotate_down = 355;   // to prevent crashes
 			}
-			dstdisplay = equirectToFisheye(img, sky_threshold, horizontal_extent, 400);
+			dstdisplay = equirectToFisheye(img, sky_threshold, horizontal_extent, move_down, rotate_now, 400);
 		}
 
 		if (cvui::button(frame, 350, 650, "Close")) {
@@ -311,7 +311,7 @@ cv::Mat dst2, dst3, dsts;	// temp dst, for eachvid
 		}
 		if (cvui::button(frame, 200, 650, "Save")) {
 		    // save button was clicked
-		    dst = equirectToFisheye(img, sky_threshold, horizontal_extent, outputw);
+		    dst = equirectToFisheye(img, sky_threshold, horizontal_extent, move_down, rotate_now, outputw);
 			// ask for filename
 			char const * FilterPatternsimgsave[2] =  { "*.jpg","*.png" };
 			char const * SaveFileNameimg;
