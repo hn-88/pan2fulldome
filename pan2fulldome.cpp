@@ -66,6 +66,9 @@ cv::Mat equirectToFisheye(cv::Mat inputMat, int sky_threshold, int horizontal_ex
 	// horizontal_extent has a range 0 to 360. scaling this to 0 to equirectw
 	// https://stackoverflow.com/questions/2745074/fast-ceiling-of-an-integer-division-in-c-c
 	horizontal_extent = ceil(((float)equirectw/360.)*(float)horizontal_extent);
+	// move_down has a range 0 to 400. scaling this to 0 to Input Mat h
+	move_down = (int)((float)inputMat.rows/400.)*move_down;
+	
 	cv::Mat dst, dst2, tmp, tmpcropped, sky, equirect;
 	cv::Size dstsize = cv::Size(outputw,outputw);
 	// for testing large Mat, 
@@ -87,7 +90,7 @@ cv::Mat equirectToFisheye(cv::Mat inputMat, int sky_threshold, int horizontal_ex
 	cv::resize(inputMat, tmp, cv::Size(horizontal_extent, ceil(inputMat.rows*(float)horizontal_extent/(float)inputMat.cols)), 0, 0, cv::INTER_CUBIC);
 	//tmp.rowRange(1, outputw-sky_threshold).copyTo(dst.rowRange(sky_threshold+1, outputw));
 	int x =  (int)(equirectw-horizontal_extent)/2;
-	int y =  sky_threshold; // we should use a different slider for this
+	int y =  move_down;
 	if ((y+tmp.rows) > equirect.rows) {
 		// then we have to truncate tmp
 		// and remember first y, then x
@@ -290,9 +293,9 @@ cv::Mat dst2, dst3, dsts;	// temp dst, for eachvid
 		}
 
 		cvui::text(frame, 335, 580, "Move down");
-		if (cvui::trackbar(frame, 315, 600, 135, &move_down, 1, 360)) {
-			if (move_down > 355) {
-				move_down = 355;   // to prevent crashes
+		if (cvui::trackbar(frame, 315, 600, 135, &move_down, 0, 400)) {
+			if (move_down > 395) {
+				move_down = 395;   // to prevent crashes
 			}
 			dstdisplay = equirectToFisheye(img, sky_threshold, horizontal_extent, move_down, rotate_now, 400);
 		}
