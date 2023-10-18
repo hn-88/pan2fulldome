@@ -281,7 +281,7 @@ cv::Mat dst2, dst3, dsts;	// temp dst, for eachvid
 			if (sky_threshold > 395) { 
 				sky_threshold = 395;  // to prevent crashes
 			}
-			dstdisplay = equirectToFisheye(img, sky_threshold, horizontal_extent, move_down, rotate_now, 400);
+			dstdisplay = equirectToFisheye(img, sky_threshold, horizontal_extent, move_down, rotate_down, 400);
 		}
 
 		cvui::text(frame, 170, 580, "Horizontal extent");
@@ -289,7 +289,7 @@ cv::Mat dst2, dst3, dsts;	// temp dst, for eachvid
 			if (horizontal_extent < 5) {
 				horizontal_extent = 5;   // to prevent crashes
 			}
-			dstdisplay = equirectToFisheye(img, sky_threshold, horizontal_extent, move_down, rotate_now, 400);
+			dstdisplay = equirectToFisheye(img, sky_threshold, horizontal_extent, move_down, rotate_down, 400);
 		}
 
 		cvui::text(frame, 335, 580, "Move down");
@@ -297,7 +297,7 @@ cv::Mat dst2, dst3, dsts;	// temp dst, for eachvid
 			if (move_down > 395) {
 				move_down = 395;   // to prevent crashes
 			}
-			dstdisplay = equirectToFisheye(img, sky_threshold, horizontal_extent, move_down, rotate_now, 400);
+			dstdisplay = equirectToFisheye(img, sky_threshold, horizontal_extent, move_down, rotate_down, 400);
 		}
 
 		cvui::text(frame, 485, 580, "Rotate down");
@@ -305,7 +305,7 @@ cv::Mat dst2, dst3, dsts;	// temp dst, for eachvid
 			if (rotate_down > 355) {
 				rotate_down = 355;   // to prevent crashes
 			}
-			dstdisplay = equirectToFisheye(img, sky_threshold, horizontal_extent, move_down, rotate_now, 400);
+			dstdisplay = equirectToFisheye(img, sky_threshold, horizontal_extent, move_down, rotate_down, 400);
 		}
 
 		if (cvui::button(frame, 350, 650, "Close")) {
@@ -314,7 +314,7 @@ cv::Mat dst2, dst3, dsts;	// temp dst, for eachvid
 		}
 		if (cvui::button(frame, 200, 650, "Save")) {
 		    // save button was clicked
-		    dst = equirectToFisheye(img, sky_threshold, horizontal_extent, move_down, rotate_now, outputw);
+		    dst = equirectToFisheye(img, sky_threshold, horizontal_extent, move_down, rotate_down, outputw);
 			// ask for filename
 			char const * FilterPatternsimgsave[2] =  { "*.jpg","*.png" };
 			char const * SaveFileNameimg;
