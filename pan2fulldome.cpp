@@ -91,15 +91,15 @@ cv::Mat equirectToFisheye(cv::Mat inputMat, int sky_threshold, int horizontal_ex
 	if ((y+tmp.rows) > equirect.rows) {
 		// then we have to truncate tmp
 		// and remember first y, then x
-		tmp2 = tmp(Range(0,equirect.rows-y), Range(0,horizontal_extent));
+		tmpcropped = tmp(cv::Range(0,equirect.rows-y), cv::Range(0,horizontal_extent));
 	}
 	else {
-		tmp2 = tmp;
+		tmpcropped = tmp;
 	}
 		
 	if (x<2) { x=0;}
 	if (y<(inputMat.rows-2)) {// otherwise don't copy, since tmp may be too small
-		tmp2.copyTo(equirect(cv::Rect(x,y,tmp.cols, tmp.rows)));
+		tmpcropped.copyTo(equirect(cv::Rect(x,y,tmpcropped.cols, tmpcropped.rows)));
 	}
 	// todo the equirectToFisheye here
 	cv::resize(equirect, dst, dstsize, 0, 0, cv::INTER_LINEAR);// this is just for testing.
