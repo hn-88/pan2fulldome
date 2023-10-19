@@ -30,6 +30,14 @@ jobs:
     - name: Add MSBuild to PATH
       uses: microsoft/setup-msbuild@v1.0.2
       
+    - name: Cache OpenCV          
+      uses: actions/cache@v3.0.2
+      id: OpenCV-cache
+      with:
+          path: |
+            **/OpenCV
+          key: ${{ runner.os }}-OpenCV
+          
     - name: Install OpenCV from github releases
       if: steps.OpenCV-cache.outputs.cache-hit != 'true'
       run: |
@@ -47,14 +55,6 @@ jobs:
       # See https://docs.microsoft.com/visualstudio/msbuild/msbuild-command-line-reference
       run: msbuild /m /p:Platform=x64 /p:Configuration=Release ${{env.SOLUTION_FILE_PATH}}
 
-    - name: Cache OpenCV          
-      uses: actions/cache@v3.0.2
-      id: OpenCV-cache
-      with:
-          path: |
-            **/OpenCV
-          key: ${{ runner.os }}-OpenCV
-          
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v3.1.2
       with:
