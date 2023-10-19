@@ -1,0 +1,12 @@
+#!/usr/bin/env xdg-open
+
+[Desktop Entry]
+Version=1.0
+Name=pan2fulldome
+Comment=pan2fulldome tool
+Exec=pan2fulldome
+Icon=pan2fulldome
+Terminal=true
+Type=Application
+Categories=Development;
+Name[en_IN]=pan2fulldome.desktop
