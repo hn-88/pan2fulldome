@@ -17,6 +17,7 @@
 // references 
 // https://hnsws.blogspot.com/2012/11/displaying-panoramas-on-fulldome.html
 // https://github.com/hn-88/OCVvid2fulldome
+// https://github.com/hn-88/OCVWarp/
 // https://github.com/Dovyski/cvui
 
 #include <stdio.h>
@@ -43,6 +44,111 @@
 #define WINDOW_NAME "PAN2FULLDOME - HIT <esc> TO CLOSE"
 
 #define CV_PI   3.1415926535897932384626433832795
+
+cv::Mat ocvwarp1(cv::Mat equirect, int rotate_down) {
+	// from https://github.com/hn-88/OCVWarp/blob/master/OCVWarp.cpp
+	// Equirectangular 360 to 180 degree fisheye
+	/*
+	{
+		// using the transformations at
+		// http://paulbourke.net/dome/dualfish2sphere/diagram.pdf
+		int xcd = floor(map_x.cols/2) - 1 ;
+		int ycd = floor(map_x.rows/2) - 1 ;
+		float halfcols = map_x.cols/2;
+		float halfrows = map_x.rows/2;
+
+		int anglex = -90;
+		int angley = rotate_down;		
+		
+		float longi, lat, Px, Py, Pz, theta;						// X and Y are map_x and map_y
+		float xfish, yfish, rfish, phi, xequi, yequi;
+		float PxR, PyR, PzR;
+		float aperture = CV_PI;
+		float angleyrad = -angley*CV_PI/180;	// made these minus for more intuitive feel
+		float anglexrad = -anglex*CV_PI/180;
+		
+		//Mat inputmatrix, rotationmatrix, outputmatrix;
+		// https://en.wikipedia.org/wiki/Rotation_matrix#Basic_rotations
+		//rotationmatrix = (Mat_<float>(3,3) << cos(angleyrad), 0, sin(angleyrad), 0, 1, 0, -sin(angleyrad), 0, cos(angleyrad)); //y
+		//rotationmatrix = (Mat_<float>(3,3) << 1, 0, 0, 0, cos(angleyrad), -sin(angleyrad), 0, sin(angleyrad), cos(angleyrad)); //x
+		//rotationmatrix = (Mat_<float>(3,3) << cos(angleyrad), -sin(angleyrad), 0, sin(angleyrad), cos(angleyrad), 0, 0, 0, 1); //z
+		
+		for ( int i = 0; i < map_x.rows; i++ ) // here, i is for y and j is for x
+			{
+				for ( int j = 0; j < map_x.cols; j++ )
+				{
+					// normalizing to [-1, 1]
+					xfish = (j - xcd) / halfcols;
+					yfish = (i - ycd) / halfrows;
+					rfish = sqrt(xfish*xfish + yfish*yfish);
+					theta = atan2(yfish, xfish);
+					phi = rfish*aperture/2;
+					
+					// Paul's co-ords - this is suitable when phi=0 is Pz=0
+					
+					//Px = cos(phi)*cos(theta);
+					//Py = cos(phi)*sin(theta);
+					//Pz = sin(phi);
+					
+					// standard co-ords - this is suitable when phi=pi/2 is Pz=0
+					Px = sin(phi)*cos(theta);
+					Py = sin(phi)*sin(theta);
+					Pz = cos(phi);
+					
+					if(angley!=0 || anglex!=0)
+					{
+						// cos(angleyrad), 0, sin(angleyrad), 0, 1, 0, -sin(angleyrad), 0, cos(angleyrad));
+						
+						PxR = Px;
+						PyR = cos(angleyrad) * Py - sin(angleyrad) * Pz;
+						PzR = sin(angleyrad) * Py + cos(angleyrad) * Pz;
+						
+						Px = cos(anglexrad) * PxR - sin(anglexrad) * PyR;
+						Py = sin(anglexrad) * PxR + cos(anglexrad) * PyR;
+						Pz = PzR;
+					}
+					
+					
+					longi 	= atan2(Py, Px);
+					lat	 	= atan2(Pz,sqrt(Px*Px + Py*Py));	
+					// this gives south pole centred, ie yequi goes from [-1, 0]
+					// Made into north pole centred by - (minus) in the final map_y assignment
+					
+					xequi = longi / CV_PI;
+					// this maps to [-1, 1]
+					yequi = 2*lat / CV_PI;
+					// this maps to [-1, 0] for south pole
+					
+					//if (rfish <= 1.0)		// outside that circle, let it be black
+					// removed the black circle to help transformtype=5
+					// avoid bottom pixels black
+					{
+						map_x.at<float>(i, j) =  abs(xequi * map_x.cols / 2 + xcd);
+						//map_y.at<float>(i, j) =  yequi * map_x.rows / 2 + ycd;
+						// this gets south pole centred view
+						
+						// the abs is to correct for -0.5 xequi value at longi=0
+						
+						map_y.at<float>(i, j) =  yequi * map_x.rows / 2 + ycd;
+						//debug
+						//~ if (rfish <= 1.0/500)
+						//if ((longi==0)||(longi==CV_PI)||(longi==-CV_PI))
+						//if (lat==0)	// since these are floats, probably doesn't work
+						//~ {
+							//~ std::cout << "i,j,mapx,mapy=";
+							//~ std::cout << i << ", ";
+							//~ std::cout << j << ", ";
+							//~ std::cout << map_x.at<float>(i, j) << ", ";
+							//~ std::cout << map_y.at<float>(i, j) << std::endl;
+						//~ }
+					}
+					
+				 } // for j
+				   
+			} // for i
+			
+	}*/
+}
 
 cv::Mat equirectToFisheye(cv::Mat inputMat, int sky_threshold, int horizontal_extent, int move_down, int rotate_down, int outputw)
 {
@@ -106,6 +212,7 @@ cv::Mat equirectToFisheye(cv::Mat inputMat, int sky_threshold, int horizontal_ex
 	}
 	// todo the equirectToFisheye here
 	cv::resize(equirect, dst, dstsize, 0, 0, cv::INTER_LINEAR);// this is just for testing.
+	//dst = ocvwarp1(equirect, rotate_down)
 	// "horiz extent" would determine the "zoom" level
 	// "rotate_down" would determine the angle tilt above or below the horizon
 	return dst;
