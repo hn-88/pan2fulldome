@@ -47,7 +47,7 @@ jobs:
         export VERSION=$(git rev-parse --short HEAD) # linuxdeployqt uses this for naming the file
         ./linuxdeployqt-continuous-x86_64.AppImage appdir/usr/share/applications/*.desktop -bundle-non-qt-libs
         ./linuxdeployqt-continuous-x86_64.AppImage appdir/usr/share/applications/*.desktop -appimage
-        mv pan2fulldome*.AppImage pan2fulldome-0.20-x86_64.AppImage -v
+        mv pan2fulldome*.AppImage pan2fulldome-1.00-x86_64.AppImage -v
 
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v3.1.2
