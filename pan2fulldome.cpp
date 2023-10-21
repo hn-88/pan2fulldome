@@ -53,7 +53,7 @@ cv::Mat ocvwarp1(cv::Mat equirect, int rotate_down, int outputw, int outputh) {
 	cv::Mat src, res, tmp;
 	cv::Mat dstfloat, dstmult, dstres, dstflip;
 	    
-	std::vector<Mat> spl;
+	std::vector<cv::Mat> spl;
 	cv::Mat dst(Sout, CV_8UC3); // S = src.size, and src.type = CV_8UC3
 	cv::Mat dst2;	// temp dst, for double remap
 	cv::Mat dst_x, dst_y;
@@ -68,8 +68,8 @@ cv::Mat ocvwarp1(cv::Mat equirect, int rotate_down, int outputw, int outputh) {
 		map_x = cv::Mat(Sout, CV_32FC1);
 		map_y = cv::Mat(Sout, CV_32FC1);
 		// line 1003
-		map_x = Scalar((outputw+outputh)*10);
-    		map_y = Scalar((outputw+outputh)*10);
+		map_x = cv::Scalar((outputw+outputh)*10);
+    		map_y = cv::Scalar((outputw+outputh)*10);
     		// initializing so that it points outside the image
     		// so that unavailable pixels will be black
 	
@@ -170,8 +170,8 @@ cv::Mat ocvwarp1(cv::Mat equirect, int rotate_down, int outputw, int outputh) {
 	// this completes update_map()
 	////////////////////////////////
 	//convertMaps(map_x, map_y, dst_x, dst_y, CV_16SC2);	// supposed to make it faster to remap
-	cv::resize( src, res, Size(outputw, outputh), 0, 0, INTER_CUBIC);
-	cv::remap( res, dst, dst_x, dst_y, INTER_LINEAR, BORDER_CONSTANT, Scalar(0, 0, 0) );
+	cv::resize( src, res, cv::Size(outputw, outputh), 0, 0, cv::INTER_CUBIC);
+	cv::remap( res, dst, dst_x, dst_y, cv::INTER_LINEAR, cv::BORDER_CONSTANT, cv::Scalar(0, 0, 0) );
 			
 	
 }
