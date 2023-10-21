@@ -50,12 +50,8 @@ cv::Mat ocvwarp1(cv::Mat equirect, int rotate_down, int outputw, int outputh) {
 	// line 924
 	cv::Size Sout = cv::Size(outputw,outputh);
 	// taking vars from line 955
-	cv::Mat src, res, tmp;
-	cv::Mat dstfloat, dstmult, dstres, dstflip;
-	    
-	std::vector<cv::Mat> spl;
-	cv::Mat dst(Sout, CV_8UC3); // S = src.size, and src.type = CV_8UC3
-	cv::Mat dst2;	// temp dst, for double remap
+	cv::Mat res;
+	cv::Mat dst(Sout, CV_8UC3); // Sout = dst.size, and src.type = CV_8UC3
 	cv::Mat dst_x, dst_y;
 
 	//////////////////////////////////////////////
@@ -170,7 +166,7 @@ cv::Mat ocvwarp1(cv::Mat equirect, int rotate_down, int outputw, int outputh) {
 	// this completes update_map()
 	////////////////////////////////
 	cv::convertMaps(map_x, map_y, dst_x, dst_y, CV_16SC2);	// supposed to make it faster to remap
-	cv::resize( src, res, cv::Size(outputw, outputh), 0, 0, cv::INTER_CUBIC);
+	cv::resize( equirect, res, cv::Size(outputw, outputh), 0, 0, cv::INTER_CUBIC);
 	cv::remap( res, dst, dst_x, dst_y, cv::INTER_LINEAR, cv::BORDER_CONSTANT, cv::Scalar(0, 0, 0) );
 	return dst;			
 	
