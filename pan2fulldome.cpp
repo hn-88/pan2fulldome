@@ -238,7 +238,7 @@ cv::Mat equirectToFisheye(cv::Mat inputMat, int sky_threshold, int horizontal_ex
 	}
 	// todo the equirectToFisheye here
 	//cv::resize(equirect, dst, dstsize, 0, 0, cv::INTER_LINEAR);// this is just for testing.
-	dst = ocvwarp1(equirect, rotate_down, outputw, outputw)
+	dst = ocvwarp1(equirect, rotate_down, outputw, outputw);
 	// "horiz extent" would determine the "zoom" level
 	// "rotate_down" would determine the angle tilt above or below the horizon
 	return dst;
