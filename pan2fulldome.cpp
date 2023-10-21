@@ -45,13 +45,34 @@
 
 #define CV_PI   3.1415926535897932384626433832795
 
-cv::Mat ocvwarp1(cv::Mat equirect, int rotate_down) {
+cv::Mat ocvwarp1(cv::Mat equirect, int rotate_down, int outputw, int outputh) {
 	// from https://github.com/hn-88/OCVWarp/blob/master/OCVWarp.cpp
+	// line 924
+	cv::Size Sout = cv::Size(outputw,outputh);
+	// taking vars from line 955
+	cv::Mat src, res, tmp;
+	cv::Mat dstfloat, dstmult, dstres, dstflip;
+	    
+	std::vector<Mat> spl;
+	cv::Mat dst(Sout, CV_8UC3); // S = src.size, and src.type = CV_8UC3
+	cv::Mat dst2;	// temp dst, for double remap
+	cv::Mat dst_x, dst_y;
+
+	//////////////////////////////////////////////
 	// Equirectangular 360 to 180 degree fisheye
-	/*
-	{
+	// from void update_map( double anglex, double angley, Mat &map_x, Mat &map_y, int transformtype )
+	
 		// using the transformations at
 		// http://paulbourke.net/dome/dualfish2sphere/diagram.pdf
+  		cv::Mat map_x, map_y; //  initialize these, line 987
+		map_x = cv::Mat(Sout, CV_32FC1);
+		map_y = cv::Mat(Sout, CV_32FC1);
+		// line 1003
+		map_x = Scalar((outputw+outputh)*10);
+    		map_y = Scalar((outputw+outputh)*10);
+    		// initializing so that it points outside the image
+    		// so that unavailable pixels will be black
+	
 		int xcd = floor(map_x.cols/2) - 1 ;
 		int ycd = floor(map_x.rows/2) - 1 ;
 		float halfcols = map_x.cols/2;
@@ -146,8 +167,13 @@ cv::Mat ocvwarp1(cv::Mat equirect, int rotate_down) {
 				 } // for j
 				   
 			} // for i
+	// this completes update_map()
+	////////////////////////////////
+	//convertMaps(map_x, map_y, dst_x, dst_y, CV_16SC2);	// supposed to make it faster to remap
+	cv::resize( src, res, Size(outputw, outputh), 0, 0, INTER_CUBIC);
+	cv::remap( res, dst, dst_x, dst_y, INTER_LINEAR, BORDER_CONSTANT, Scalar(0, 0, 0) );
 			
-	}*/
+	
 }
 
 cv::Mat equirectToFisheye(cv::Mat inputMat, int sky_threshold, int horizontal_extent, int move_down, int rotate_down, int outputw)
