@@ -169,10 +169,10 @@ cv::Mat ocvwarp1(cv::Mat equirect, int rotate_down, int outputw, int outputh) {
 			} // for i
 	// this completes update_map()
 	////////////////////////////////
-	//convertMaps(map_x, map_y, dst_x, dst_y, CV_16SC2);	// supposed to make it faster to remap
+	cv::convertMaps(map_x, map_y, dst_x, dst_y, CV_16SC2);	// supposed to make it faster to remap
 	cv::resize( src, res, cv::Size(outputw, outputh), 0, 0, cv::INTER_CUBIC);
 	cv::remap( res, dst, dst_x, dst_y, cv::INTER_LINEAR, cv::BORDER_CONSTANT, cv::Scalar(0, 0, 0) );
-			
+	return dst;			
 	
 }
 
@@ -237,8 +237,8 @@ cv::Mat equirectToFisheye(cv::Mat inputMat, int sky_threshold, int horizontal_ex
 		tmpcropped.copyTo(equirect(cv::Rect(x,y,tmpcropped.cols, tmpcropped.rows)));
 	}
 	// todo the equirectToFisheye here
-	cv::resize(equirect, dst, dstsize, 0, 0, cv::INTER_LINEAR);// this is just for testing.
-	//dst = ocvwarp1(equirect, rotate_down)
+	//cv::resize(equirect, dst, dstsize, 0, 0, cv::INTER_LINEAR);// this is just for testing.
+	dst = ocvwarp1(equirect, rotate_down, outputw, outputw)
 	// "horiz extent" would determine the "zoom" level
 	// "rotate_down" would determine the angle tilt above or below the horizon
 	return dst;
