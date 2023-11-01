@@ -397,6 +397,8 @@ cv::Mat dst2, dst3, dsts;	// temp dst, for eachvid
 
 	// Init cvui and tell it to create a OpenCV window, i.e. cv::namedWindow(WINDOW_NAME).
 	cvui::init(WINDOW_NAME);
+	bool sky_checked = true;
+	bool black_checked = false;
 
 	while (true) {
 		// Fill the frame with a nice color
@@ -406,6 +408,20 @@ cv::Mat dst2, dst3, dsts;	// temp dst, for eachvid
 		cvui::text(frame, 350, 10, "Preview");
 		cvui::button(frame, 140, 30, dstdisplay, dstdisplay, dstdisplay);
 
+		
+		cvui::checkbox(frame, 40, 540, "Interp sky", &sky_checked);
+		cvui::checkbox(frame, 190, 540, "Black sky", &black_checked);
+		if(black_checked) {
+			sky_checked = false;
+		} else {
+			sky_checked = true;
+		}
+		if(sky_checked) {
+			black_checked = false;
+		} else {
+			black_checked = true;
+		}
+		
 		cvui::text(frame, 35, 580, "Sky");
 		if (cvui::trackbar(frame, 15, 600, 135, &sky_threshold, 0, 400)) {
 			if (sky_threshold > 395) { 
