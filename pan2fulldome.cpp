@@ -411,14 +411,18 @@ cv::Mat dst2, dst3, dsts;	// temp dst, for eachvid
 
 		
 		cvui::checkbox(frame, 40, 540, "Interp sky", &sky_checked);
-		cvui::checkbox(frame, 190, 540, "Black sky", &black_checked);
-		cvui::checkbox(frame, 350, 540, "Simple polar", &simple_checked);
-		if(black_checked) {
-			sky_checked = false;
-		} 
 		if(sky_checked) {
 			black_checked = false;
-		} 
+		} else {
+			black_checked = true;
+		}
+		cvui::checkbox(frame, 190, 540, "Black sky", &black_checked);
+		if(black_checked) {
+			sky_checked = false;
+		} else {
+			sky_checked = true;
+		}
+		cvui::checkbox(frame, 350, 540, "Simple polar", &simple_checked);
 		
 		cvui::text(frame, 35, 580, "Sky");
 		if (cvui::trackbar(frame, 15, 600, 135, &sky_threshold, 0, 400)) {
