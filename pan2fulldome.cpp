@@ -232,11 +232,17 @@ cv::Mat equirectToFisheye(cv::Mat inputMat, int sky_threshold, int horizontal_ex
 	if (y<(inputMat.rows-2)) {// otherwise don't copy, since tmp may be too small
 		tmpcropped.copyTo(equirect(cv::Rect(x,y,tmpcropped.cols, tmpcropped.rows)));
 	}
-	// todo the equirectToFisheye here
-	//cv::resize(equirect, dst, dstsize, 0, 0, cv::INTER_LINEAR);// this is just for testing.
+	// the equirectToFisheye is done here
 	dst = ocvwarp1(equirect, rotate_down, outputw, outputw);
 	// "horiz extent" would determine the "zoom" level
 	// "rotate_down" would determine the angle tilt above or below the horizon
+	// before returning dst, we want to clean up the seam, using inpainting
+	// first create and initialize a mask, needs to be 8 bit 1 channel
+	cv::Mat mask(dstsize, CV_8UC1, Scalar(0));
+	// todo calculate the correct polynomial vertices
+	std::vector<cv::Point> my_poly = {cv::Point(150, 100), cv::Point(300, 150), cv::Point(300, 310), cv::Point(150, 300)};
+	cv::fillPoly(mask, my_poly, cv::Scalar::all(1));
+	dst = cv.inpaint(dst,mask,3,cv.INPAINT_TELEA);
 	return dst;
 }
 
