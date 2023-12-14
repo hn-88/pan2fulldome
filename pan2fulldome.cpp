@@ -242,7 +242,7 @@ cv::Mat equirectToFisheye(cv::Mat inputMat, int sky_threshold, int horizontal_ex
 	// todo calculate the correct polynomial vertices
 	std::vector<cv::Point> my_poly = {cv::Point(150, 100), cv::Point(300, 150), cv::Point(300, 310), cv::Point(150, 300)};
 	cv::fillPoly(mask, my_poly, cv::Scalar::all(1));
-	dst = cv::inpaint(dst,mask,3,cv::INPAINT_TELEA);
+	cv::inpaint(dst, mask, dst, 3, cv::INPAINT_TELEA);
 	return dst;
 }
 
