@@ -240,8 +240,8 @@ cv::Mat equirectToFisheye(cv::Mat inputMat, int sky_threshold, int horizontal_ex
 	// first create and initialize a mask, needs to be 8 bit 1 channel
 	cv::Mat mask(dstsize, CV_8UC1, cv::Scalar(0));
 	// todo calculate the correct polynomial vertices
-	std::vector<cv::Point> my_poly = {cv::Point(150, 100), cv::Point(300, 150), cv::Point(300, 310), cv::Point(150, 300)};
-	cv::fillPoly(mask, my_poly, cv::Scalar::all(1));
+	std::vector<cv::Point> my_poly = {cv::Point(15, 10), cv::Point(30, 15), cv::Point(30, 70), cv::Point(15, 30)};
+	cv::fillPoly(mask, my_poly, cv::Scalar::all(255));
 	cv::inpaint(dst, mask, dst, 3, cv::INPAINT_TELEA);
 	return dst;
 }
