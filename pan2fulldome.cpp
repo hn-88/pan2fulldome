@@ -244,9 +244,11 @@ cv::Mat equirectToFisheye(cv::Mat inputMat, int sky_threshold, int horizontal_ex
 	try {
 	std::vector<cv::Point> my_poly = {cv::Point(outputw/2 - outputw/20,outputw), cv::Point(outputw/2 + outputw/20,outputw), cv::Point(outputw/2 + outputw/20,outputw/2), cv::Point(outputw/2 - outputw/20,outputw/2)};
 	//cv::fillPoly(InputOutputArray img, InputArrayOfArrays pts, const Scalar & color)	
-	cv::fillPoly(mask, my_poly, cv::Scalar::all(255));
+	//cv::fillPoly(mask, my_poly, cv::Scalar::all(255));
+	// void cv::rectangle(InputOutputArray img, Point pt1, Point pt2, const Scalar & color)
+	cv::rectangle(mask, cv::Point(outputw/2 - outputw/20,outputw), cv::Point(outputw/2 + outputw/20,outputw/2), cv::Scalar(255) );
 	} catch (...) {
-		std::cout << "Exception occurred in fillPoly!" << std::endl;
+		std::cout << "Exception occurred in creating mask!" << std::endl;
 		return dst;
 	}
 	try {
