@@ -244,13 +244,13 @@ cv::Mat equirectToFisheye(cv::Mat inputMat, int sky_threshold, int horizontal_ex
 	try {
 	std::vector<cv::Point> my_poly = {cv::Point(outputw/2 - outputw/20,outputw), cv::Point(outputw/2 + outputw/20,outputw), cv::Point(outputw/2 + outputw/20,outputw/2), cv::Point(outputw/2 - outputw/20,outputw/2)};
 	cv::fillPoly(mask, my_poly, cv::Scalar::all(255));
-	} catch {
+	} catch () {
 		std::cout << "Exception occurred in fillPoly!" << std::endl;
 		return dst;
 	}
 	try {
 	cv::inpaint(dst, mask, dst2, 3, cv::INPAINT_TELEA);
-	} catch {
+	} catch () {
 		std::cout << "Exception occurred in inpaint!" << std::endl;
 		return dst;
 	}
