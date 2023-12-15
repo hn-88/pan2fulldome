@@ -239,8 +239,8 @@ cv::Mat equirectToFisheye(cv::Mat inputMat, int sky_threshold, int horizontal_ex
 	// before returning dst, we want to clean up the seam, using inpainting
 	// first create and initialize a mask, needs to be 8 bit 1 channel
 	cv::Mat mask(dstsize, CV_8UC1, cv::Scalar(0));
-	// todo calculate the correct polynomial vertices
-	std::vector<cv::Point> my_poly = {cv::Point(15, 10), cv::Point(30, 15), cv::Point(30, 70), cv::Point(15, 30)};
+	// todo calculate the correct polynomial vertices [160,130],[350,130],[250,300]
+	std::vector<cv::Point> my_poly = {cv::Point(160,130), cv::Point(350,130), cv::Point(250,300)};
 	cv::fillPoly(mask, my_poly, cv::Scalar::all(255));
 	cv::inpaint(dst, mask, dst, 3, cv::INPAINT_TELEA);
 	return dst;
