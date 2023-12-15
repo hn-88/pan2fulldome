@@ -242,7 +242,7 @@ cv::Mat equirectToFisheye(cv::Mat inputMat, int sky_threshold, int horizontal_ex
 	// todo calculate the correct polynomial vertices [160,130],[350,130],[250,300]
 	// width 10% of outputw, height 50% of outputw
 	try {
-	std::vector<cv::Point> my_poly = {cv::Point(outputw/20,outputw), cv::Point(outputw/10,outputw), cv::Point(outputw/20,outputw/2), cv::Point(outputw/10,outputw/2)};
+	std::vector<cv::Point> my_poly = {cv::Point(outputw/2 - outputw/20,outputw), cv::Point(outputw/2 + outputw/20,outputw), cv::Point(outputw/2 + outputw/20,outputw/2), cv::Point(outputw/2 - outputw/20,outputw/2)};
 	cv::fillPoly(mask, my_poly, cv::Scalar::all(255));
 	} catch {
 		cout << "Exception occurred in fillPoly!" << endl;
