@@ -248,12 +248,14 @@ cv::Mat equirectToFisheye(cv::Mat inputMat, int sky_threshold, int horizontal_ex
 	// void cv::rectangle(InputOutputArray img, Point pt1, Point pt2, const Scalar & color)
 	// opencv has x=0,y=0 at top left 
 	cv::rectangle(mask, cv::Point(outputw/2 - outputw/4,0), cv::Point(outputw/2 + outputw/4,outputw/2), cv::Scalar(255) );
+	std::cout << "Created mask!" << std::endl;
 	} catch (...) {
 		std::cout << "Exception occurred in creating mask!" << std::endl;
 		return dst;
 	}
 	try {
 	cv::inpaint(dst, mask, dst2, 3, cv::INPAINT_TELEA);
+	std::cout << "Inpainting done!" << std::endl;
 	} catch (...) {
 		std::cout << "Exception occurred in inpaint!" << std::endl;
 		return dst;
